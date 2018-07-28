@@ -1,19 +1,20 @@
-package cn.swpu.entity;
+ï»¿package cn.swpu.entity;
 
 /**
- * ÓÃ»§ÊµÌåÀà
+ * ç”¨æˆ·å®ä½“ç±»
  * @author zhangbo
- *
  */
+
 public class User {
-	private int  id;//ÓÃ»§±àºÅ
+	private int  id;//ç”¨æˆ·ç¼–å·
 	private String username;
 	private String password;
-	private String email;//ÓÃ»§ÓÊÏä£¬×÷µÇÂ¼ÕË»§
-	private int order_num;//¶©µ¥±àºÅ
+	private String email;//ç”¨æˆ·é‚®ç®±ï¼Œä½œç™»å½•è´¦æˆ·
 	private String address;
 	private String tel;
-	private int identityId;//ÓÃ»§Éí·İ
+	private int identityId;//ç”¨æˆ·èº«ä»½
+	
+
 	public int getId() {
 		return id;
 	}
@@ -36,14 +37,7 @@ public class User {
 		return email;
 	}
 	public void setEmail(String email) {
-		this.email = email;
-	}
-	public int getOrder_num() {
-		return order_num;
-	}
-	public void setOrder_num(int order_num) {
-		this.order_num = order_num;
-	}
+		this.email = email;}
 	public String getAddress() {
 		return address;
 	}

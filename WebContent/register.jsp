@@ -1,7 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<base href="<%=basePath %>" />
 <title>用户登录</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -47,12 +48,12 @@
 										</h4>
 
 										<div class="space-6"></div>
-										<form id="commentForm" action="system/user/register" method="post" onsubmit="return check()">
+										<form id="commentForm" action="LoginServlet?flag=register" method="post" onsubmit="return check()">
 											<fieldset>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userId"
-														required name="userAccount"  type="text" class="form-control"
-														placeholder="请输入您用户名" /> <i class="icon-user"></i>
+														required name="userName"  type="text" class="form-control"
+														placeholder="请输入您真实姓名" /> <i class="icon-user"></i>
 												</span>
 												</label> <label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userPw"
@@ -64,12 +65,6 @@
 													class="block input-icon input-icon-right"> <input id="userNumber"
 														required name="userNumber"  type="text" class="form-control"
 														placeholder="请输入您的邮箱" /> <i class="icon-user"></i>
-												</span>
-												</label>
-												<label class="block clearfix"> <span
-													class="block input-icon input-icon-right"> <input id="userName"
-														required name="userName"  type="text" class="form-control"
-														placeholder="请输入您的姓名" /> <i class="icon-user"></i>
 												</span>
 												</label>
 												<label class="block clearfix"> <span

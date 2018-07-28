@@ -1,13 +1,13 @@
-package cn.swpu.dao;
+ï»¿package cn.swpu.dao;
 
 import java.util.List;
 
 import cn.swpu.entity.User;
 
 public interface UserDao {
-	public User login(User user);//µÇÂ¼½Ó¿Ú
-	public int register(User user);//×¢²á½Ó¿Ú/Ôö¼ÓÓÃ»§½Ó¿Ú
-	public List<User> queryAllUsers();//²éÑ¯ËùÓĞÓÃ»§½Ó¿Ú
-	public int deleteUser(User user);//É¾³ıÓÃ»§½Ó¿Ú
-	public int updateUser(User user);//Ôö¼ÓÓÃ»§½Ó¿Ú
+	public User login(User user);//ç™»å½•æ¥å£
+	public int register(User user);//æ³¨å†Œæ¥å£/å¢åŠ ç”¨æˆ·æ¥å£
+	public List<User> queryAllUsers();//æŸ¥è¯¢æ‰€æœ‰ç”¨æˆ·æ¥å£
+	public int deleteUser(User user);//åˆ é™¤ç”¨æˆ·æ¥å£
+	public int updateUser(User user);//æ›´æ–°ç”¨æˆ·ä¿¡æ¯
 }

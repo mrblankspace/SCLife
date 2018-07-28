@@ -1,13 +1,13 @@
-package cn.swpu.entity;
+ï»¿package cn.swpu.entity;
 /**
- * Êı¾İ×Öµä±í
+ * æ•°æ®å­—å…¸è¡¨
  * @author zhangbo
  *
  */
 public class DataDict {
 	private int dictId;         //id
-	private String catagory_id;    //Àà±ğid
-	private int dict_type_code; //Àà±ğÃû
+	private String catagory_id;    //ç±»åˆ«id
+	private int dict_type_code; //ç±»åˆ«å
 	public int getDictId() {
 		return dictId;
 	}

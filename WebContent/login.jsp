@@ -1,7 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<base href="<%=basePath %>" />
 <title>用户登录</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,7 +35,7 @@
 										</h4>
 
 										<div class="space-6"></div>
-										<form action="system/user/login" method="post" onsubmit="return check()">
+										<form action="LoginServlet?flag=login" method="post" onsubmit="return check()">
 											<fieldset>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userId"
@@ -55,7 +56,7 @@
 														class="width-35 pull-right btn btn-sm btn-primary">
 														<i class="icon-key"></i> 登陆
 													</button>
-													<a href="register.html" class="width-35 pull-left btn btn-sm btn-primary">注册</a>
+													<a href="register.jsp" class="width-35 pull-left btn btn-sm btn-primary">注册</a>
 													
 												</div>
 

@@ -1,18 +1,19 @@
-package cn.swpu.service.impl;
+锘縫ackage cn.swpu.service.impl;
 
 import java.util.List;
 
 import cn.swpu.dao.UserDao;
+import cn.swpu.dao.impl.UserDaoImpl;
 import cn.swpu.entity.User;
 import cn.swpu.service.UserService;
 
 /**
- * 功能：调用UserDao类实现UserService接口
+ * 鍔熻兘锛氳皟鐢║serDao绫诲疄鐜癠serService鎺ュ彛
  * @author Administrator
  *
  */
 public class UserServiceImpl implements UserService{
-	private UserDao userDao;
+	private UserDao userDao = new UserDaoImpl();
 	@Override
 	public User Login(User user) 
 	{

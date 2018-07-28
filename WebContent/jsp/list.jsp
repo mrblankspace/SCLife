@@ -39,19 +39,15 @@
 			<input type="submit" class="btn btn-danger" value="查询"> 		
 		</div>
 		<div class="row" style="padding: 15px;">		
-			<d:table name="" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
-				<d:column property="bookId" title="类型"></d:column>
-				<d:column property="bookName" title="描述"></d:column>
-				<d:column property="bookAuthor" title="图书作者"></d:column>
-				<d:column property="bookPrice" title="图书价格"></d:column>
-				<d:column property="bookType" title="图书类型"></d:column>
-				<d:column property="bookPublish" title="图书出版社"></d:column>
-				<d:column property="bookSum" title="图书总数"></d:column>						
-				<d:column href="" paramId="bookId" paramProperty="bookId" title="借书" value="借书"></d:column>
-				<d:column href="" paramId="bookId" paramProperty="bookId" title="还书" value="还书"></d:column>
-				<d:column href="" paramId="bookId" paramProperty="bookId" title="修改" value="修改"></d:column>
-				<d:column href="" paramId="bookId" paramProperty="bookId" title="删除" value="删除"></d:column>
-			</d:table>
+			 <d:table name="" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
+        <d:column property="class_id" title="订单类型"></d:column>
+        <d:column property="order_describe" title="需求描述"></d:column>
+        <d:column property="order_money" title="赏金"></d:column>
+        <d:column property="order_status" title="订单状态"></d:column>
+        <d:column property="order_status" title="图书类型"></d:column>
+        <d:column property="order_date" title="发布时间"></d:column>         
+        <d:column href="" paramId="order_id" paramProperty="bookId" title="我要接单" value="${order_id }"></d:column>
+      </d:table>
 		</div>
 	</form>
 </body>

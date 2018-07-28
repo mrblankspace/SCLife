@@ -1,4 +1,4 @@
-package cn.swpu.dao.impl;
+ï»¿package cn.swpu.dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,11 +12,14 @@ import cn.swpu.dao.UserDao;
 import cn.swpu.entity.User;
 import cn.swpu.util.DbUtil;
 
+
 public class UserDaoImpl implements UserDao{
 	
 	/**
-	 * ¹¦ÄÜ:¸ù¾İservlet´«ÈëµÄUser¶ÔÏó½øĞĞÊı¾İ¿â±È¶Ô²¢·µ»ØĞÂUser¶ÔÏó£¬ĞÂUser¶ÔÏó´æÓĞ²éÑ¯µ½µÄĞÅÏ¢
+	 * åŠŸèƒ½:æ ¹æ®servletä¼ å…¥çš„Userå¯¹è±¡è¿›è¡Œæ•°æ®åº“æ¯”å¯¹å¹¶è¿”å›æ–°Userå¯¹è±¡ï¼Œæ–°Userå¯¹è±¡å­˜æœ‰æŸ¥è¯¢åˆ°çš„ä¿¡æ¯
 	 */
+	
+	
 	public User login(User user)
 	{
 		User daoUser=new User();
@@ -25,12 +28,12 @@ public class UserDaoImpl implements UserDao{
 		ResultSet rs=null;
 		try {
 			Connection con=du.getCon();
-			String sql="select * from user where email=? and password=?";//´«ÈëÓÊÏäºÍÃÜÂë
-			pstmt=con.prepareStatement(sql);//ÏÈ±àÒëÏÂÒ»¾ä½ÓÊÜ²ÎÊı
-			pstmt.setString(1, user.getEmail());//»ñÈ¡ÓÉ
+			String sql="select * from user where email=? and password=?";//ä¼ å…¥é‚®ç®±å’Œå¯†ç 
+			pstmt=con.prepareStatement(sql);//å…ˆç¼–è¯‘ä¸‹ä¸€å¥æ¥å—å‚æ•°
+			pstmt.setString(1, user.getEmail());//è·å–ç”±
 			pstmt.setString(2, user.getPassword());
 			
-			rs=pstmt.executeQuery();//Ê¹ÓÃexecuteQuery() ·µ»ØResultSet ¶ÔÏó
+			rs=pstmt.executeQuery();//ä½¿ç”¨executeQuery() è¿”å›ResultSet å¯¹è±¡
 			while(rs.next())
 			{
 				daoUser.setId(rs.getInt("id"));
@@ -39,7 +42,6 @@ public class UserDaoImpl implements UserDao{
 				daoUser.setAddress(rs.getString("address"));
 				daoUser.setIdentityId(rs.getInt("identityId"));
 				daoUser.setEmail(rs.getString("email"));
-				daoUser.setOrder_num(rs.getInt("order_num"));
 				daoUser.setTel(rs.getString("tel"));
 			}
 			du.closeCon(con);//????
@@ -59,13 +61,14 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	/**
-	 * ¹¦ÄÜ£º¸ù¾İ´«ÈëµÄUser¶ÔÏó½øĞĞ×¢²á£¬·µ»ØÊı¾İ¿âÄÚ±íÊÜÓ°ÏìĞĞÊı£¬0==Ê§°Ü 1==³É¹¦
+	 * åŠŸèƒ½ï¼šæ ¹æ®ä¼ å…¥çš„Userå¯¹è±¡è¿›è¡Œæ³¨å†Œï¼Œè¿”å›æ•°æ®åº“å†…è¡¨å—å½±å“è¡Œæ•°ï¼Œ0==å¤±è´¥ 1==æˆåŠŸ
 	 */
 	public int register(User user)
 	{
-		DbUtil du=new DbUtil();
-		PreparedStatement pstmt=null;
-		int row=0;//³õÊ¼»¯Îª0
+		DbUtil du=new DbUtil();	
+		PreparedStatement pstmt = null;
+		
+		int row=0;//åˆå§‹åŒ–ä¸º0
 		
 		try {
 			Connection con=du.getCon();
@@ -76,22 +79,21 @@ public class UserDaoImpl implements UserDao{
 			String regTel=user.getTel();
 			
 			/**
-			 * ´ıÌÖÂÛ²¿·Ö
+			 * å¾…è®¨è®ºéƒ¨åˆ†
 			 */
-			int regOrderNum=user.getOrder_num();//¶©µ¥Êı³õÊ¼¸³ÖµÎª0£¿£¿£¿
-			int regIdenID=user.getIdentityId();//ÓÃ»§Éí·İ²»ÄÜÓÉÓÃ»§Ñ¡Ôñ
+			int regIdenID=user.getIdentityId();//ç”¨æˆ·èº«ä»½ä¸èƒ½ç”±ç”¨æˆ·é€‰æ‹©
 			
-			String sql="insert into user (username,password,email,address,tel) values(?,?,?,?,?)";//¶ÔÓ¦Êı¾İ¿â×Ö¶Î£¬IDÎª×ÔÔöÁ¿???order_numberÊÇ·ñ¸³Öµ£¬identityIDÊÇ·ñÎªÑ¡Ôñ
-			pstmt=con.prepareStatement(sql);
-			pstmt.setString(1, regName);//¸øsqlÓï¾ä¸³Öµ
+			String sql="insert into user (username,password,email,address,tel,identityId) values (?,?,?,?,?,'0')";//å¯¹åº”æ•°æ®åº“å­—æ®µï¼ŒIDä¸ºè‡ªå¢é‡???order_numberæ˜¯å¦èµ‹å€¼ï¼ŒidentityIDæ˜¯å¦ä¸ºé€‰æ‹©
+			pstmt=con.prepareStatement(sql);		
+			pstmt.setString(1, regName);//ç»™sqlè¯­å¥èµ‹å€¼
 			pstmt.setString(2, regPwd);
 			pstmt.setString(3, regMail);
 			pstmt.setString(4, regAddress);
 			pstmt.setString(5, regTel);
 			/**
-			 * ×¢²áÊ±¿ÉÒÔÄ¬ÈÏ¸øÓÃ»§identitID¸³ÖµÎª¡°ÓÃ»§¡±
+			 * æ³¨å†Œæ—¶å¯ä»¥é»˜è®¤ç»™ç”¨æˆ·identitIDèµ‹å€¼ä¸ºâ€œç”¨æˆ·â€
 			 */
-			row=pstmt.executeUpdate();//Ê¹ÓÃexecuteUpdate() ·µ»ØÊÜÓ°ÏìĞĞÊı
+			row=pstmt.executeUpdate();//ä½¿ç”¨executeUpdate() è¿”å›å—å½±å“è¡Œæ•°
 			du.closeCon(con);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -105,15 +107,15 @@ public class UserDaoImpl implements UserDao{
 			}
 		}
 		
-		return row;//·µ»ØÊÜÓ°ÏìĞĞÊı 1==×¢²á³É¹¦
+		return row;//è¿”å›å—å½±å“è¡Œæ•° 1==æ³¨å†ŒæˆåŠŸ
 	}
 	
 	/**
-	 * ¹¦ÄÜ£º²éÑ¯Êı¾İ¿âÄÚËùÓĞÓÃ»§ĞÅÏ¢£¬²¢·µ»ØÒ»¸ö<User>¼¯ºÏ
+	 * åŠŸèƒ½ï¼šæŸ¥è¯¢æ•°æ®åº“å†…æ‰€æœ‰ç”¨æˆ·ä¿¡æ¯ï¼Œå¹¶è¿”å›ä¸€ä¸ª<User>é›†åˆ
 	 */
 	public List<User> queryAllUsers()
 	{
-		List<User> list=new ArrayList<User>();//´´½¨User¼¯ºÏ±£´æ±éÀú³öµÄUser¶ÔÏóÃÇ
+		List<User> list=new ArrayList<User>();//åˆ›å»ºUseré›†åˆä¿å­˜éå†å‡ºçš„Userå¯¹è±¡ä»¬
 		DbUtil du=new DbUtil();
 		Statement stmt=null;
 		ResultSet rs=null;
@@ -121,8 +123,8 @@ public class UserDaoImpl implements UserDao{
 			Connection con=du.getCon();
 			stmt=con.createStatement();
 			String sql="select * from user";
-			rs=stmt.executeQuery(sql);//·µ»Ø½á¹û
-			while(rs.next())//µ±rs.next()ÓĞ½á¹ûÑ­»·¸øListÌí¼Ó½øUser¶ÔÏó
+			rs=stmt.executeQuery(sql);//è¿”å›ç»“æœ
+			while(rs.next())//å½“rs.next()æœ‰ç»“æœå¾ªç¯ç»™Listæ·»åŠ è¿›Userå¯¹è±¡
 			{
 				User user=new User();
 				user.setId(rs.getInt("id"));
@@ -131,9 +133,8 @@ public class UserDaoImpl implements UserDao{
 				user.setAddress(rs.getString("address"));
 				user.setIdentityId(rs.getInt("balance"));
 				user.setEmail(rs.getString("email"));
-				user.setOrder_num(rs.getInt("order_num"));
 				user.setTel(rs.getString("tel"));
-				list.add(user);//¸ølistÌí¼ÓUser¶ÔÏó
+				list.add(user);//ç»™listæ·»åŠ Userå¯¹è±¡
 			}
 			du.closeCon(con);//?????
 		} catch (ClassNotFoundException e) {
@@ -153,7 +154,7 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	/**
-	 * ¹¦ÄÜ£ºÉ¾³ı´«ÈëµÄÓÃ»§
+	 * åŠŸèƒ½ï¼šåˆ é™¤ä¼ å…¥çš„ç”¨æˆ·
 	 */
 	public int deleteUser(User user)
 	{
@@ -163,11 +164,11 @@ public class UserDaoImpl implements UserDao{
 		try {
 			int delId=user.getId();
 			Connection con=du.getCon();
-			String sql="delete from user where id=?";//Í¨¹ı´«ÈëÓÃ»§µÄidÉ¾³ı
+			String sql="delete from user where id=?";//é€šè¿‡ä¼ å…¥ç”¨æˆ·çš„idåˆ é™¤
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, delId);
 			
-			row=pstmt.executeUpdate();//½ÓÊÜ·µ»ØÊÜÓ°ÏìÌõÊı
+			row=pstmt.executeUpdate();//æ¥å—è¿”å›å—å½±å“æ¡æ•°
 			
 			du.closeCon(con);
 		} catch (ClassNotFoundException e) {
@@ -185,8 +186,8 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	/**
-	 * ¹¦ÄÜ£º¸üĞÂÓÃ»§ĞÅÏ¢£¬¸ù¾İ´«ÈëµÄUser¶ÔÏó
-	 * ´ıÌÖÂÛ²¿·Ö£¬Õâ¸ö·½·¨Ìá¹©ÁËĞŞ¸Ä¹ÜÀíÔ±²ÅÄÜĞŞ¸ÄÄÚÈİµÄÈ¨ÏŞ
+	 * åŠŸèƒ½ï¼šæ›´æ–°ç”¨æˆ·ä¿¡æ¯ï¼Œæ ¹æ®ä¼ å…¥çš„Userå¯¹è±¡
+	 * å¾…è®¨è®ºéƒ¨åˆ†ï¼Œè¿™ä¸ªæ–¹æ³•æä¾›äº†ä¿®æ”¹ç®¡ç†å‘˜æ‰èƒ½ä¿®æ”¹å†…å®¹çš„æƒé™
 	 */
 	public int updateUser(User user)
 	{
@@ -196,25 +197,23 @@ public class UserDaoImpl implements UserDao{
 		try {
 			Connection con=du.getCon();
 			
-			int getId=user.getId();//»ñÈ¡ÓÃ»§id£¬ÅĞ¶ÏÒÀ¾İ
+			int getId=user.getId();//è·å–ç”¨æˆ·idï¼Œåˆ¤æ–­ä¾æ®
 			
 			String updName=user.getUsername();
 			String updMail=user.getEmail();
 			String updAddress=user.getAddress();
 			String updPwd=user.getPassword();
 			String updTel=user.getTel();
-			int updOrderNum=user.getOrder_num();
 			int updIdenId=user.getIdentityId();//
-			String sql="update user set username=?,password=?,address=?,identityId=?,email=?,order_num=£¿,tel=? where id=?";
+			String sql="update user set username=?,password=?,address=?,identityId=?,email=?,tel=? where id=?";
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, updName);
 			pstmt.setString(2, updPwd);
 			pstmt.setString(3, updAddress);
-			pstmt.setInt(4, updIdenId);//¿ÉÄÜÉ¾È¥,ÌÖÂÛ²¿·Ö£¬¹ÜÀíÔ±¿ÉÒÔÌáÉıÓÃ»§È¨ÏŞ£¬»òÕßĞ´³ÉÁ½¸öupdate£¬Ò»¸öÓÃ»§Ö»ÄÜĞŞ¸Ä»ù´¡ĞÅÏ¢£¬Ò»¸öÌá¹©¸ø¹ÜÀíÔ±ĞŞ¸ÄËùÓĞĞÅÏ¢
+			pstmt.setInt(4, updIdenId);//å¯èƒ½åˆ å»,è®¨è®ºéƒ¨åˆ†ï¼Œç®¡ç†å‘˜å¯ä»¥æå‡ç”¨æˆ·æƒé™ï¼Œæˆ–è€…å†™æˆä¸¤ä¸ªupdateï¼Œä¸€ä¸ªç”¨æˆ·åªèƒ½ä¿®æ”¹åŸºç¡€ä¿¡æ¯ï¼Œä¸€ä¸ªæä¾›ç»™ç®¡ç†å‘˜ä¿®æ”¹æ‰€æœ‰ä¿¡æ¯
 			pstmt.setString(5, updMail);
-			pstmt.setInt(6, updOrderNum);
-			pstmt.setString(7, updTel);
-			pstmt.setInt(8, getId);
+			pstmt.setString(6, updTel);
+			pstmt.setInt(7, getId);
 			row=pstmt.executeUpdate();
 			
 			du.closeCon(con);
@@ -229,10 +228,12 @@ public class UserDaoImpl implements UserDao{
 				e.printStackTrace();
 			}
 		}
+		
 		return row;
 	}
 	
 	/**
-	 * ¿ÉÒÔÊµÏÖ£º¹Ø¼ü×Ö²éÕÒ,
+	 * å¯ä»¥å®ç°ï¼šå…³é”®å­—æŸ¥æ‰¾,
 	 */
+	
 }

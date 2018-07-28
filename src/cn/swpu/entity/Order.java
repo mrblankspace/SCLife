@@ -1,6 +1,6 @@
-package cn.swpu.entity;
+ο»Ώpackage cn.swpu.entity;
 /**
- * ¶©µ¥ΚµΜεΐΰ
+ * Β¶Β©ΒµΒ¥ΞΒµΞΞµΞΞ°
  * @author zhangbo
  *
  */
