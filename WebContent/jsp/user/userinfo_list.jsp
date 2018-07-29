@@ -34,7 +34,7 @@
 				<label>条件:</label> 
 				<select name="condition" class="form-control">
 					<option value="userName">姓名</option>
-					<option value="userAccount">账号</option>
+					<option value="email">邮箱</option>
 				</select>
 				<input type="text" name="content" value="${result }" class="form-control" placeholder="请输入查询条件" />
 			</div>
@@ -44,15 +44,15 @@
 			</a>
 		</div>
 		<div class="row" style="padding: 15px;">			
-			<d:table name="${list}" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
-				<d:column property="userId" title="用户编号"></d:column>
-				<d:column property="userName" title="用户妮称"></d:column>
-				<d:column property="userEmail" title="邮件"></d:column>				
-				<d:column property="userAddress" title="地址"></d:column>
+			<d:table name="${userList}" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
+				<d:column property="id" title="用户编号"></d:column>
+				<d:column property="username" title="用户妮称"></d:column>
+				<d:column property="email" title="邮件"></d:column>				
+				<d:column property="address" title="地址"></d:column>
 				<d:column property="tel" title="电话"></d:column>
-				<d:column property="userMark" title="用户标识"></d:column>
-				<d:column href="" paramId="userId" paramProperty="userId" title="修改" value="修改"></d:column>
-				<d:column href="" paramId="userId" paramProperty="userId" title="删除" value="删除"></d:column>
+				<d:column property="identityId" title="用户标识"></d:column>
+				<d:column href="" paramId="userId" paramProperty="id" title="修改" value="修改"></d:column>
+				<d:column href="" paramId="userId" paramProperty="id" title="删除" value="删除"></d:column>
 			</d:table>
 			
 		</div>

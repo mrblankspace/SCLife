@@ -25,14 +25,14 @@
   		<li ><a href="index.jsp">首页</a></li>
 	</ul>
   <!-- 这里需要有个隐藏的订单id  后端要注意 -->
-    <d:table name="" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
+    <d:table name="${list}" pagesize="5" requestURI="OrderServlet?flag=findOrder_index" class="table table-hover table-striped table-bordered">
         <d:column property="class_id" title="订单类型"></d:column>
         <d:column property="order_describe" title="需求描述"></d:column>
         <d:column property="order_money" title="赏金"></d:column>
         <d:column property="order_status" title="订单状态"></d:column>
         <d:column property="order_status" title="图书类型"></d:column>
         <d:column property="order_date" title="发布时间"></d:column>         
-        <d:column href="" paramId="order_id" paramProperty="bookId" title="我要接单" value="${order_id }"></d:column>
+        <d:column href="" paramId="order_id" paramProperty="bookId" title="我要接单" value=""></d:column>
       </d:table>
 </div>
 

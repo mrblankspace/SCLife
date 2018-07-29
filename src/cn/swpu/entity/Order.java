@@ -1,18 +1,18 @@
 ﻿package cn.swpu.entity;
 /**
- * ¶©µ¥ΚµΜεΐΰ
+ * 7.29 修改pojo到数据库的映射不再是简单数据类型
  * @author zhangbo
  *
  */
 public class Order {
 	private int order_id;      
-	private int catagory_id;
-	private String order_describe;
+	private String catagory;		 //直接写死在里面吧  不用数据字典了
+	private String describe;
 	private float order_money;
-	private int accept_id;
-	private int send_id;
-	private int order_status;
-	private String order_date;
+	private User accept_person;
+	private User send_person;
+	private String order_status;    //直接写死在里面吧  不用数据字典了
+	private String order_date;			
 	private String finish_date;
 	public int getOrder_id() {
 		return order_id;
@@ -20,42 +20,49 @@ public class Order {
 	public void setOrder_id(int order_id) {
 		this.order_id = order_id;
 	}
-	public int getCatagory_id() {
-		return catagory_id;
-	}
-	public void setCatagory_id(int catagory_id) {
-		this.catagory_id = catagory_id;
-	}
-	public String getOrder_describe() {
-		return order_describe;
-	}
-	public void setOrder_describe(String order_describe) {
-		this.order_describe = order_describe;
-	}
+
+	
 	public float getOrder_money() {
 		return order_money;
 	}
 	public void setOrder_money(float order_money) {
 		this.order_money = order_money;
 	}
-	public int getAccept_id() {
-		return accept_id;
+
+	public User getAccept_person() {
+		return accept_person;
 	}
-	public void setAccept_id(int accept_id) {
-		this.accept_id = accept_id;
+	public void setAccept_person(User accept_person) {
+		this.accept_person = accept_person;
 	}
-	public int getSend_id() {
-		return send_id;
+	public User getSend_person() {
+		return send_person;
+	}	
+	public void setSend_person(User send_person) {
+		this.send_person = send_person;
 	}
-	public void setSend_id(int send_id) {
-		this.send_id = send_id;
+	
+
+
+	public String getCatagory() {
+		return catagory;
 	}
-	public int getOrder_status() {
+	public void setCatagory(String catagory) {
+		this.catagory = catagory;
+	}
+	public String getOrder_status() {
 		return order_status;
 	}
-	public void setOrder_status(int order_status) {
+	public void setOrder_status(String order_status) {
 		this.order_status = order_status;
 	}
+	public String getDescribe() {
+		return describe;
+	}
+	public void setDescribe(String describe) {
+		this.describe = describe;
+	}
+
 	public String getOrder_date() {
 		return order_date;
 	}

@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet{
 		User user = us.Login(tempuser);
 		
 		if(user.getEmail()!=null){
-			request.setAttribute("user", user);//此处已修改为传出user
+			request.setAttribute("user", user); //此处已修改为传出user
 			request.getRequestDispatcher("index.jsp")
 				.forward(request, response);//转向哪个界面呢
 			//Session user['role']="lichenghong";百度搜索session

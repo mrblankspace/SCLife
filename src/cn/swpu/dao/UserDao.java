@@ -10,4 +10,5 @@ public interface UserDao {
 	public List<User> queryAllUsers();//查询所有用户接口
 	public int deleteUser(User user);//删除用户接口
 	public int updateUser(User user);//更新用户信息
+	public User findById(int id);
 }

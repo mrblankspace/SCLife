@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
   pageEncoding="UTF-8"%>
+  <%@ page import="cn.swpu.entity.User" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +14,9 @@
 <link rel="stylesheet" href="resource/assets/css/ace-skins.min.css" />
 <script src="resource/assets/js/ace-extra.min.js"></script>
 <script src="resource/assets/jquery.min.js"></script>
+<script>
+ 
+</script>
 </head>
 <body>
 
@@ -51,7 +55,7 @@
           <li class="light-blue"><a data-toggle="dropdown" href="#"
             class="dropdown-toggle"> <img class="nav-user-photo"
               src="resource/assets/avatars/user.jpg" alt="Jason's Photo" />
-              <span class="user-info"> <small>欢迎光临,${userName }</small>
+              <span class="user-info"> <small>欢迎光临,${user.username}<%if(request.getAttribute("user")==null){%>小鲜肉<%}%></small>
             </span> <i class="icon-caret-down"></i>
           </a>
             <ul
@@ -114,16 +118,16 @@
         <!-- #sidebar-shortcuts -->
 
         <ul class="nav nav-list">
-          <li class="active"><a href="main.jsp" target="mainframe">
+          <li class="active"><a id="showIndex" href="OrderServlet?flag=findOrder_index" target="mainframe">
               <i class="icon-dashboard"></i> <span class="menu-text">
-                控制台 </span>
+                主页 </span>
           </a></li>
-          <li><a href="jsp/list.jsp" target="mainframe"
+          <li><a href="OrderServlet?flag=findOrder_waimai" target="mainframe"
             class="dropdown-toggle"> <i class="icon-desktop"></i> <span
               class="menu-text"> 快递 外卖</span> <b
               class="arrow icon-angle-down"></b>
           </a></li>
-          <li><a href="jsp/list.jsp" target="mainframe"
+          <li><a href="OrderServlet?flag=findOrder_waibao" target="mainframe"
             class="dropdown-toggle"> <i class="icon-desktop"></i> <span
               class="menu-text">服务外包</span> <b
               class="arrow icon-angle-down"></b>
@@ -132,17 +136,25 @@
           </li>
         
         
-          <li><a href="jsp/list.jsp" target="mainframe"
+          <li><a href="OrderServlet?flag=findOrder_parttimejob" target="mainframe"
             class="dropdown-toggle"> <i class="icon-desktop"></i> <span
               class="menu-text">兼职 </span> <b
               class="arrow icon-angle-down"></b>
           </a>
          </li>
-          <li><a href="jsp/list.jsp" target="mainframe"
+          <li><a href="OrderServlet?flag=findOrder_other" target="mainframe"
             class="dropdown-toggle"> <i class="icon-desktop"></i> <span
               class="menu-text">其他</span> <b
               class="arrow icon-angle-down"></b>
           </a></li>
+         <%User user = (User)request.getAttribute("user"); %>
+          <%if(user!=null&&user.getIdentityId()==1){%>
+           <li><a href="AdminServlet?flag=showUsers" target="mainframe"
+            class="dropdown-toggle"> <i class="icon-desktop"></i> <span
+              class="menu-text">用户管理</span> <b
+              class="arrow icon-angle-down"></b>
+          </a></li>
+         <%}%>
         </ul>
         <!-- /.nav-list -->
 
@@ -162,7 +174,7 @@
       </div>
 
       <div class="main-content" id="mains">
-        <iframe id="mainframe" name="mainframe" src="main.jsp"
+        <iframe id="mainframe" name="mainframe" src="OrderServlet?flag=findOrder_index"
           style="width: 100%; border: 0px;"> </iframe>
 
       </div>

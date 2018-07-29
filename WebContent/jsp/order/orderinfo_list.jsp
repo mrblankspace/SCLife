@@ -22,7 +22,7 @@
 <body>
 	<div>
 		<ul class="breadcrumb" style="margin: 0px;">
-			<li>后台传过来</li>
+			<li>${path}</li>
 			<li>接单</li>
 		</ul>
 	</div>
@@ -34,19 +34,20 @@
 					<option value="bookName">地点</option>
 					<option value="bookAuthor">类型</option>
 				</select>
-				<input type="text" name="content" value="${result }" class="form-control" placeholder="请输入查询条件" />
+				<input type="text" name="content" value="${result}" class="form-control" placeholder="请输入查询条件" />
 			</div>
 			<input type="submit" class="btn btn-danger" value="查询"> 		
 		</div>
 		<div class="row" style="padding: 15px;">		
-			 <d:table name="" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
-        <d:column property="class_id" title="订单类型"></d:column>
-        <d:column property="order_describe" title="需求描述"></d:column>
+			 <d:table name="${list}" pagesize="5" requestURI="OrderServlet?flag=findOrder" class="table table-hover table-striped table-bordered">
+        <d:column property="catagory" title="订单类型"></d:column>
+        <d:column property="send_person.username" title="发布人"></d:column>
+        <d:column property="describe" title="需求描述"></d:column>
         <d:column property="order_money" title="赏金"></d:column>
         <d:column property="order_status" title="订单状态"></d:column>
-        <d:column property="order_status" title="图书类型"></d:column>
-        <d:column property="order_date" title="发布时间"></d:column>         
-        <d:column href="" paramId="order_id" paramProperty="bookId" title="我要接单" value="${order_id }"></d:column>
+        <d:column property="order_date" title="发布时间"></d:column>
+        <d:column property="finish_date" title="完成时间"></d:column>         
+        <d:column href="" paramId="order_id" paramProperty="order_id" title="我要接单" value="我要接单"></d:column>
       </d:table>
 		</div>
 	</form>

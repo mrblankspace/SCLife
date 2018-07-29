@@ -17,9 +17,7 @@ public class UserDaoImpl implements UserDao{
 	
 	/**
 	 * 功能:根据servlet传入的User对象进行数据库比对并返回新User对象，新User对象存有查询到的信息
-	 */
-	
-	
+	 */	
 	public User login(User user)
 	{
 		User daoUser=new User();
@@ -131,7 +129,7 @@ public class UserDaoImpl implements UserDao{
 				user.setUsername(rs.getString("username"));
 				user.setPassword(rs.getString("password"));
 				user.setAddress(rs.getString("address"));
-				user.setIdentityId(rs.getInt("balance"));
+				user.setIdentityId(rs.getInt("identityId"));
 				user.setEmail(rs.getString("email"));
 				user.setTel(rs.getString("tel"));
 				list.add(user);//给list添加User对象
@@ -230,6 +228,46 @@ public class UserDaoImpl implements UserDao{
 		}
 		
 		return row;
+	}
+
+	@Override
+	public User findById(int id) {
+		User daoUser=new User();
+		DbUtil du=new DbUtil();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			Connection con=du.getCon();
+			String sql="select * from user where id=?";//传入邮箱和密码
+			pstmt=con.prepareStatement(sql);//先编译下一句接受参数
+			pstmt.setLong(1, id);//获取由
+
+			
+			rs=pstmt.executeQuery();//使用executeQuery() 返回ResultSet 对象
+			while(rs.next())
+			{
+				daoUser.setId(rs.getInt("id"));
+				daoUser.setUsername(rs.getString("username"));
+				daoUser.setPassword(rs.getString("password"));
+				daoUser.setAddress(rs.getString("address"));
+				daoUser.setIdentityId(rs.getInt("identityId"));
+				daoUser.setEmail(rs.getString("email"));
+				daoUser.setTel(rs.getString("tel"));
+			}
+			du.closeCon(con);//????
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return daoUser;
 	}
 	
 	/**
