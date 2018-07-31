@@ -31,15 +31,13 @@
 				</script>
 
     <div class="navbar-container ace-save-state" id="navbar-container">
-      <!--add -->   <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 					<span class="sr-only">Toggle sidebar</span>
 
 					<span class="icon-bar"></span>
 
-					<span class="icon-bar"></span>
-
-					<span class="icon-bar"></span>
-				</button>
+					<span class="icon-bar"></span><span class="icon-bar"></span>
+		</button>
 		
 		<div class="navbar-header pull-left">
         <a href="index.jsp" class="navbar-brand"> 
@@ -50,7 +48,7 @@
         <!-- /.brand -->
       </div>
       <!-- /.navbar-header -->
-      <div class="navbar-buttons navbar-header pull-right" role="navigation">
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
         <ul class="nav ace-nav">
           <li class="green dropdown-modal" >
 			  <a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
@@ -198,24 +196,20 @@
   </div>
 
   <div class="main-container ace-save-state" id="main-container">
-    <script type="text/javascript">
-					try {
-						ace.settings.check('main-container', 'fixed')
-					} catch (e) {
-					}
-				</script>
+       <script type="text/javascript">
+				try{ace.settings.loadState('main-container')}catch(e){}
+		</script>
 
-    <div class="main-container-inner">
-      <a class="menu-toggler" id="menu-toggler" href="#"> <span
-        class="menu-text"></span>
-      </a>
 
-      <div class="sidebar" class="sidebar responsive ace-save-state" id="sidebar">
+  
+     
+
+      <div class="sidebar responsive ace-save-state" id="sidebar">
         <script type="text/javascript">
 					try{ace.settings.loadState('sidebar')}catch(e){}
 				</script>
 
-        <div class="sidebar-shortcuts" id="sidebar-shortcuts-large">
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
           <div class="sidebar-shortcuts-large"
             id="sidebar-shortcuts-large">
 
