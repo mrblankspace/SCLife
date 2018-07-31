@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <title>用户登录</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link href="resource/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="resource/assets/css/font-awesome.min.css" />
@@ -57,25 +57,25 @@
 												</span>
 												</label> <label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userPw"
-														required name="userPw" type="password" class="form-control"
+														required name="password" type="password" class="form-control"
 														placeholder="请输入您的密码" /> <i class="icon-lock"></i>
 												</span>
 												</label>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userNumber"
-														required name="userNumber"  type="text" class="form-control"
+														required name="userEmail"  type="text" class="form-control"
 														placeholder="请输入您的邮箱" /> <i class="icon-user"></i>
 												</span>
 												</label>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userAge"
-														required name="userAge"  type="text" class="form-control"
+														required name="address"  type="text" class="form-control"
 														placeholder="请输入您的地址" /> <i class="icon-user"></i>
 												</span>
 												</label>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userSex"
-														required name="userSex"  type="text" class="form-control"
+														required name="userTel"  type="text" class="form-control"
 														placeholder="请输入您的电话" /> <i class="icon-user"></i>
 												</span>
 												</label>

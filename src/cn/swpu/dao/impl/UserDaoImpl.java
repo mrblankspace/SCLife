@@ -273,5 +273,46 @@ public class UserDaoImpl implements UserDao{
 	/**
 	 * 可以实现：关键字查找,
 	 */
+	/**
+	 * 实现通过用户id获取用户的所用信息
+	 */
+	public User queryUserById(User user)
+	{
+		User daoUser=new User();
+		DbUtil du=new DbUtil();
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			Connection con=du.getCon();
+			String sql="select * from user where id=? ";//传入邮箱和密码
+			pstmt=con.prepareStatement(sql);//先编译下一句接受参数
+			pstmt.setInt(1, user.getId());
+			
+			rs=pstmt.executeQuery();//使用executeQuery() 返回ResultSet 对象
+			while(rs.next())
+			{
+				daoUser.setId(rs.getInt("id"));
+				daoUser.setUsername(rs.getString("username"));
+				daoUser.setPassword(rs.getString("password"));
+				daoUser.setAddress(rs.getString("address"));
+				daoUser.setIdentityId(rs.getInt("identityId"));
+				daoUser.setEmail(rs.getString("email"));
+				daoUser.setTel(rs.getString("tel"));
+			}
+			du.closeCon(con);//????
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return daoUser;
+	}
 	
 }

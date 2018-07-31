@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 <title>用户登录</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link href="resource/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="resource/assets/css/font-awesome.min.css" />
@@ -39,12 +39,12 @@
 											<fieldset>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userId"
-														name="userAccount" value="" type="text" class="form-control"
+														name="userEmail" value="" type="text" class="form-control"
 														placeholder="请输入您的邮箱" /> <i class="icon-user"></i>
 												</span>
 												</label> <label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userPw"
-														name="userPw" value="" type="password" class="form-control"
+														name="password" value="" type="password" class="form-control"
 														placeholder="请输入您的密码" /> <i class="icon-lock"></i>
 												</span>
 												</label>
@@ -52,11 +52,12 @@
 												<div class="clearfix">
 											
 
+													<a href="register.jsp" class="width-35 pull-left btn btn-sm btn-primary">注册</a>
 													<button type="submit" 
 														class="width-35 pull-right btn btn-sm btn-primary">
 														<i class="icon-key"></i> 登陆
 													</button>
-													<a href="register.jsp" class="width-35 pull-left btn btn-sm btn-primary">注册</a>
+													
 													
 												</div>
 

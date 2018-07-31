@@ -6,6 +6,8 @@
     String basePath = request.getScheme() + "://"
         + request.getServerName() + ":" + request.getServerPort()
         + path + "/";
+    
+    System.out.print("path");
 %> 
 <!DOCTYPE html>
 <html>
@@ -40,7 +42,7 @@
     </ul>
   </div>
   <!-- 表单在这 -->
-  <form action="" id=""
+  <form action="http://localhost:8080/SCLife/PayServelet" id=""
     class="form-horizontal" method="post">
     <h5 class="page-header alert-info"
       style="margin: 0px; padding: 10px; margin-bottom: 10px;">基本信息</h5>
@@ -52,10 +54,11 @@
         ">
           <label class="col-xs-3 control-label">类型</label>
           <div class="col-xs-9 ">
-            <select name="" class="form-control">
-              <option value="">快递 外卖</option>
-              <option value="">服务外包</option>
-              <option value="">兼职</option>
+            <select name="ordertype" class="form-control">
+              <option  value="1">快递 外卖</option>
+              <option  value="2">服务外包</option>
+              <option  value="3">兼职</option>
+              <option  value="4">其他</option>
             </select>
           </div>
           <label class="col-xs-3 control-label" style="margin-top:20px">订单描述</label>
@@ -69,12 +72,12 @@
 
  <div class="row">
  <div class="col-xs-9">
-       <label class="col-xs-3 control-label">定金</label>  <div class="col-xs-3"><input type="text" class="form-control col-md-3" ></div>
+       <label class="col-xs-3 control-label">定金</label>  <div class="col-xs-3"><input name="inputprice" type="text" class="form-control col-md-3" ></div>
           <label class="col-xs-3 control-label">支付方式</label> 
           <div class="col-xs-3 ">
-            <select name="" class="form-control">
-              <option value="">支付宝</option>
-              <option value="">微信</option>
+            <select name="payway" class="form-control">
+              <option value="1">支付宝</option>
+              <option value="2">微信</option>
 
             </select>
           </div>

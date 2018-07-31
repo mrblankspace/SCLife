@@ -70,23 +70,29 @@ public class OrderDaoImpl implements OrderDao {
 	
 	public int addOrder(Order order)
 	{
+		
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
+		
 		int row=0;
 		try {
 			Connection con=du.getCon();
 			/**
 			 * 最后三个参数默认设置为空，等待用户接单后重新update
 			 */
-			String sql="insert into order (catagory_id,order_describe,order_money,send_id,order_date,accept_id,order_status，finish_date) values (?,?,?,?,?,0,0,'null')";
+			String sql="insert into SCLife.order (catagory,order_describe,order_money,send_id,order_status,order_date) values (?,?,?,?,?,?)";	  
+			
 			pstmt=con.prepareStatement(sql);
-		//	pstmt.setInt(1, order.getCatagory_id());
+			
+			pstmt.setString(1, order.getCatagory());
 			pstmt.setString(2, order.getDescribe());
 			pstmt.setFloat(3, order.getOrder_money());
-		//	pstmt.setInt(4, order.getSend_id());
-			pstmt.setString(5, order.getOrder_date());
+			pstmt.setInt(4, order.getSend_person().getId());
+			pstmt.setString(5, order.getOrder_status());
+			pstmt.setString(6, order.getOrder_date());
 			
-			pstmt.executeUpdate();
+						
+			row=pstmt.executeUpdate();
 			
 			du.closeCon(con);
 		} catch (ClassNotFoundException e) {
@@ -105,6 +111,7 @@ public class OrderDaoImpl implements OrderDao {
 		return row;
 		
 	}
+	
 	
 	public int deleteOrder(Order order)
 	{

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+     <%@page import="cn.swpu.entity.User"%>
+     
 <%
   //获取绝对路径路径 
   String path = request.getContextPath();
@@ -20,22 +22,24 @@
 	src="resource/js/bootstrap.min.js"></script>
 </head>
 <body>
+			<% User user=(User)session.getAttribute("user"); %>
+			
 	<div>
 		<ul class="breadcrumb" style="margin: 0px;">	
 			<li>个人信息</li>
 		</ul>
 	</div>
           <!-- 注意 -->
-		<input type="hidden" name="userId" value="${userId}"/>
 		<h5 class="page-header alert-info"
 			style="margin: 0px; padding: 10px; margin-bottom: 10px;">基本信息</h5>
 		<!-- 开始1 -->
 		<div class="row">
+		
 			<div class="col-xs-5">
 				<div class="form-group ">
 					<label class="col-xs-3 control-label">昵称</label>
 					<div class="col-xs-9 ">
-						<p class="form-control-static">${userName}</p>
+						<p class="form-control-static">${user.getUsername()}</p>
 
 					</div>
 				</div>
@@ -44,7 +48,7 @@
 				<div class="form-group ">
 					<label class="col-xs-3 control-label">邮件</label>
 					<div class="col-xs-9 ">
-						<p class="form-control-static">${email}</p>
+						<p class="form-control-static">${user.getEmail()}</p>
 
 					</div>
 				</div>
@@ -57,7 +61,7 @@
 	  <div class="form-group ">
 					<label class="col-xs-3 control-label">地址</label>
 					<div class="col-xs-9 ">
-						<p class="form-control-static">${address}</p>
+						<p class="form-control-static">${user.getAddress()}</p>
 					</div>
 				</div>
 			</div>
@@ -66,7 +70,7 @@
 	  <div class="form-group ">
 					<label class="col-xs-3 control-label">电话</label>
 					<div class="col-xs-9 ">					
-						<p class="form-control-static">${tel}</p>
+						<p class="form-control-static">${user.getTel()}</p>
 					</div>
 				</div>
 			</div>
@@ -76,10 +80,14 @@
 		
 		<!-- 开始3 -->
 		<div class="row">
-		  &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;<input type="submit" class="btn btn-success" value="修改"/>
+		  &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp;
+		  <form class="form-inline definewidth m20" action="LoginServlet?flag=edit" method="post">
+		 &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; <input type="hidden" name="id" value="<%=user.getId()%>" />
+		 &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; &emsp;&emsp; <input type="submit" class="btn btn-success" value="编辑"/>
+		  </form>
 <div class="col-xs-5">
     <div class="form-group ">
-		      <label class="col-xs-3 control-label">用户身份</label>
+		    <!--   <label class="col-xs-3 control-label">用户身份</label>-->
 		      <div class="col-xs-9 ">
 		        <p class="form-control-static">${indentityId}</p>
 	          </div>

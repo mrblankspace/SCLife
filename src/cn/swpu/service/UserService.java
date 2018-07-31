@@ -5,7 +5,7 @@ import java.util.List;
 import cn.swpu.entity.User;
 
 /**
- * UserService½Ó¿Ú
+ * UserServiceï¿½Ó¿ï¿½
  * @author Administrator
  *
  */
@@ -15,4 +15,5 @@ public interface UserService {
 	public List<User> QueryAllUsers();
 	public int DeleteUser(User user);
 	public int UpdateUser(User user);
+	public User queryUserById(User user);
 }

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="d" uri="http://displaytag.sf.net"%>
+<%@ page import="cn.swpu.entity.User" %>
 <%
 	//获取绝对路径路径 
 	String path = request.getContextPath();
@@ -48,6 +49,9 @@
         <d:column property="order_date" title="发布时间"></d:column>
         <d:column property="finish_date" title="完成时间"></d:column>         
         <d:column href="" paramId="order_id" paramProperty="order_id" title="我要接单" value="我要接单"></d:column>
+        <%User user = (User)session.getAttribute("user"); %>
+          <%if(user!=null&&user.getIdentityId()==1){%><d:column href="" paramId="order_id" paramProperty="order_id" title="删除" value="删除"></d:column>
+          <%}%>
       </d:table>
 		</div>
 	</form>

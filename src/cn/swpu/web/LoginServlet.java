@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
 import cn.swpu.entity.User;
@@ -25,32 +26,32 @@ public class LoginServlet extends HttpServlet{
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("进来啦，这是doGet");
 		doPost(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String flag=request.getParameter("flag");
+		
 		//能够接受页面传送来的中文，并传输出去
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
+		String flag=request.getParameter("flag");
 		UserService us = new UserServiceImpl();
 		if("login".equals(flag))
 		{		
-		String email = request.getParameter("userAccount");
-		String password = request.getParameter("userPw");
+		String email = request.getParameter("userEmail");
+		String password = request.getParameter("password");
 		
 		User tempuser=new User();
 		tempuser.setEmail(email);
 		tempuser.setPassword(password);
-		User user = us.Login(tempuser);
+		 User imlUser = us.Login(tempuser);
 		
-		if(user.getEmail()!=null){
-			request.setAttribute("user", user); //此处已修改为传出user
+		if(imlUser.getEmail()!=null){
+			HttpSession httpSession = request.getSession();
+			httpSession.setAttribute("user", imlUser);//此处已修改为传出user
 			request.getRequestDispatcher("index.jsp")
 				.forward(request, response);//转向哪个界面呢
-			//Session user['role']="lichenghong";百度搜索session
 		}else {
 			response.sendRedirect("login.jsp");
 		}
@@ -58,10 +59,10 @@ public class LoginServlet extends HttpServlet{
 		else if("register".equals(flag))
 		{
 			String username=request.getParameter("userName");
-			String email=request.getParameter("userNumber");
-			String password=request.getParameter("userPw");
-			String address=request.getParameter("userAge");
-			String tel=request.getParameter("userSex");
+			String email=request.getParameter("userEmail");
+			String password=request.getParameter("password");
+			String address=request.getParameter("address");
+			String tel=request.getParameter("userTel");
 			
 			
 			User user=new User();
@@ -75,26 +76,43 @@ public class LoginServlet extends HttpServlet{
 			
 			request.getRequestDispatcher("login.jsp").forward(request, response);
 			
-			/*
-			 * Id，订单量，用户身份都不能允许用户设置*/
-			/**
-			 * 前端用的是重定向，我这写的是转发的位置，将前端修改
-			 */
 			
-		}else if("sendUser".equals(flag))
+		}else if("edit".equals(flag))
 		{
-			User user=(User)request.getAttribute("user");
+			int id=Integer.parseInt(request.getParameter("id"));
+			User tempuser=new User();
+			tempuser.setId(id);
+			 User imlUser = us.queryUserById(tempuser);
+			 request.setAttribute("user", imlUser);
+			 request.getRequestDispatcher("jsp/user/edituser_inf.jsp").forward(request, response);
+		}
+		else if("save".equals(flag))
+		{
+			User user=new User();
+			String username=request.getParameter("username");
+			String email=request.getParameter("email");
+			String password=request.getParameter("password");
+			String tel=request.getParameter("tel");
+			String address=request.getParameter("address");
+			int id=Integer.parseInt(request.getParameter("id"));
 			
-			request.setAttribute("user", user);
-			request.getRequestDispatcher("jsp/userinfo_show.jsp").forward(request, response);//新版本路径需要修改
-			
-			
-			
+			user.setId(id);
+			user.setUsername(username);
+			user.setEmail(email);
+			user.setPassword(password);
+			user.setTel(tel);
+			user.setAddress(address);
+			 System.out.println(user.getEmail());
+			 
+			int rows=us.UpdateUser(user);
+			HttpSession httpSession = request.getSession();
+			httpSession.setAttribute("user", user);
+			//response.sendRedirect("index.jsp");
+			request.getRequestDispatcher("jsp/user/userinfo_show.jsp").forward(request, response);
 			
 			
 		}
 	}
-	
 
 }
 
