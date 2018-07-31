@@ -14,5 +14,12 @@ public interface OrderService {
 
 	public List<Order> findJobOrder();
 	public List<Order> findWaibaoOrder();
+	
+	public Order GetOrderById(int id);
+	public List<Order> queryByOrderType(String nature);
+	public List<Order> queryByOrderStatus(String nature);
+	public List<Order> queryByOrdertime(String nature);
+	public List<Order> queryByOrderReward(String nature);
+	
 
 }

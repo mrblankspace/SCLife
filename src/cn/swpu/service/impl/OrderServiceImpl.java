@@ -28,6 +28,10 @@ public class OrderServiceImpl implements OrderService {
 	{
 		return od.updateOrder(order);
 	}
+	public Order GetOrderById(int id)
+	{
+		return od.getOrderById(id);
+	}
 	@Override
 	public List<Order> findWaimaiOrder() {
 		// TODO Auto-generated method stub
@@ -47,5 +51,29 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> findWaibaoOrder() {
 		// TODO Auto-generated method stub
 		return od.findWaibaoOrder();
+	}
+	
+	
+	/**
+	 * 孔绍坤添加
+	 * @param nature
+	 * @return
+	 */
+	public List<Order> queryByOrderType(String nature)
+	{
+		return od.queryByOrderType(nature);
+	}
+	public List<Order> queryByOrderStatus(String nature)
+	{
+		return od.queryByOrderStatus(nature);
+	}
+	
+	public List<Order> queryByOrdertime(String nature)
+	{
+		return od.queryByOrdertime(nature);
+	}
+	public List<Order> queryByOrderReward(String nature)
+	{
+		return od.queryByOrderReward(nature);
 	}
 }

@@ -9,7 +9,7 @@
 <link href="resource/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="resource/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
 <!-- text fonts -->
-<link rel="stylesheet" href="resource/ssets/css/fonts.googleapis.com.css" />
+<link rel="stylesheet" href="resource/assets/css/fonts.googleapis.com.css" />
 <link rel="stylesheet" href="resource/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 <link rel="stylesheet" href="resource/assets/css/ace-rtl.min.css" />
 <link rel="stylesheet" href="resource/assets/css/ace-skins.min.css" />
@@ -134,7 +134,7 @@
 
 										<li>
 											<a href="#" class="clearfix">
-												<img src="assets/images/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
+												<img src="resource/assets/images/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
 												<span class="msg-body">
 													<span class="msg-title">
 														<span class="blue">Fred:</span>
@@ -159,31 +159,31 @@
             </ul>
 			</li>
 
-          <li class="light-blue"><a data-toggle="dropdown" href="#"
+          <li class="light-blue dropdown-modal"><a data-toggle="dropdown" href="#"
             class="dropdown-toggle"> <img class="nav-user-photo"
-              src="resource/assets/avatars/user.jpg" alt="Jason's Photo" />
-              <span class="user-info"> <small>欢迎光临,${user.username}<%if(session.getAttribute("user")==null){%>小鲜肉</small> 
-              
+              src="resource/assets/images/avatars/user.jpg" alt="User's Photo" />
+              <span class="user-info"> <small>欢迎光临</small>,${user.username}<%if(session.getAttribute("user")==null){%>小鲜肉
+   
                <ul
               class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-              <li><a href="login.jsp"> <i class="icon-user"></i> 登陆
+              <li><a href="login.jsp"> <i class="ace-icon fa fa-long-arrow-left"></i> 登陆
               </a></li>         
                </ul>
               
-               <%}else{%></small>
+               <%}else{%>
             </span> <i class="icon-caret-down"></i>
           </a>
             <ul
               class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 
               <li><a href="jsp/user/userinfo_show.jsp"
-                target="mainframe"> <i class="icon-user"></i> 个人资料
+                target="mainframe"> <i class="ace-icon fa fa-user"></i> 个人资料
               </a></li>
 
               <li class="divider"></li>
 
               <li><a href="system/user/logout"> <i
-                  class="icon-off"></i> 退出
+                  class="ace-icon fa fa-power-off"></i> 退出
               </a></li>
             </ul></li>
         </ul><%} %>
@@ -201,7 +201,7 @@
 		</script>
 
 
-  
+ 
      
 
       <div class="sidebar responsive ace-save-state" id="sidebar">
@@ -215,7 +215,7 @@
 
               <a href="jsp/order/addOrder.jsp"  target="mainframe" > <big>我要发单</big></a>
           </div>
-
+	
           
         </div>
         <!-- #sidebar-shortcuts -->
@@ -289,60 +289,9 @@
 									"" + height + "px;");
 						</script>
 
-      <div class="ace-settings-container" id="ace-settings-container">
-        <div class="btn btn-app btn-xs btn-warning ace-settings-btn"
-          id="ace-settings-btn">
-          <i class="icon-cog bigger-150"></i>
-        </div>
-
-        <div class="ace-settings-box" id="ace-settings-box">
-          <div>
-            <div class="pull-left">
-              <select id="skin-colorpicker" class="hide">
-                <option data-skin="default" value="#438EB9">#438EB9</option>
-                <option data-skin="skin-1" value="#222A2D">#222A2D</option>
-                <option data-skin="skin-2" value="#C6487E">#C6487E</option>
-                <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
-              </select>
-            </div>
-            <span>&nbsp; éæ©ç®è¤</span>
-          </div>
-
-          <div>
-            <input type="checkbox" class="ace ace-checkbox-2"
-              id="ace-settings-navbar" /> <label class="lbl"
-              for="ace-settings-navbar"> åºå®å¯¼èªæ¡</label>
-          </div>
-
-          <div>
-            <input type="checkbox" class="ace ace-checkbox-2"
-              id="ace-settings-sidebar" /> <label class="lbl"
-              for="ace-settings-sidebar"> åºå®æ»å¨æ¡</label>
-          </div>
-
-          <div>
-            <input type="checkbox" class="ace ace-checkbox-2"
-              id="ace-settings-breadcrumbs" /> <label class="lbl"
-              for="ace-settings-breadcrumbs">åºå®é¢åå±</label>
-          </div>
-
-          <div>
-            <input type="checkbox" class="ace ace-checkbox-2"
-              id="ace-settings-rtl" /> <label class="lbl"
-              for="ace-settings-rtl">åæ¢å°å·¦è¾¹</label>
-          </div>
-
-          <div>
-            <input type="checkbox" class="ace ace-checkbox-2"
-              id="ace-settings-add-container" /> <label class="lbl"
-              for="ace-settings-add-container"> åæ¢çªå± <b></b>
-            </label>
-          </div>
-        </div>
-      </div>
+      
       <!-- /#ace-settings-container -->
-    </div>
-    <!-- /.main-container-inner -->
+
 
     <a href="#" id="btn-scroll-up"
       class="btn-scroll-up btn btn-sm btn-inverse"> <i

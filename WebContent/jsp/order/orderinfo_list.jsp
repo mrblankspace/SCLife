@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="d" uri="http://displaytag.sf.net"%>
 <%@ page import="cn.swpu.entity.User" %>
+<%@ page import="cn.swpu.entity.Order" %>
 <%
 	//获取绝对路径路径 
 	String path = request.getContextPath();
@@ -27,15 +28,17 @@
 			<li>接单</li>
 		</ul>
 	</div>
-	<form action="" method="post" class="form-inline">
+	<form action="OrderServlet?flag=query" method="post" class="form-inline">
 		<div class="row alert alert-info" style="margin: 10px; padding: 5px; text-align: center;">
 			<div class="form-group">
 				<label>条件:</label> 
 				<select name="condition" class="form-control">
-					<option value="bookName">地点</option>
-					<option value="bookAuthor">类型</option>
+					<option value="ordertype">订单类型</option>
+					<option value="orderstatus">订单状态</option>
+					<option value="ordertime">发布时间</option>
+					<option value="orderreward">最低报酬</option>
 				</select>
-				<input type="text" name="content" value="${result}" class="form-control" placeholder="请输入查询条件" />
+				<input type="text" name="content" value="" class="form-control" placeholder="请输入查询条件" />
 			</div>
 			<input type="submit" class="btn btn-danger" value="查询"> 		
 		</div>
@@ -48,7 +51,7 @@
         <d:column property="order_status" title="订单状态"></d:column>
         <d:column property="order_date" title="发布时间"></d:column>
         <d:column property="finish_date" title="完成时间"></d:column>         
-        <d:column href="" paramId="order_id" paramProperty="order_id" title="我要接单" value="我要接单"></d:column>
+        <d:column href="OrderServlet?flag=aceptOrder" paramId="order_id" paramProperty="order_id" title="我要接单" value="我要接单"></d:column>
         <%User user = (User)session.getAttribute("user"); %>
           <%if(user!=null&&user.getIdentityId()==1){%><d:column href="" paramId="order_id" paramProperty="order_id" title="删除" value="删除"></d:column>
           <%}%>
