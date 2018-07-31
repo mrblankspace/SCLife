@@ -17,7 +17,26 @@
 <script src="resource/assets/jquery.min.js"></script>
 <script src="resource/assets/js/jquery-2.1.4.min.js"></script>
 <script>
- 
+	$(function(){
+		
+		$.post("${pageContext.request.contextPath }/MessageServlet?flag=queryMessage",{"":""},function(data){
+			var length = data.length;
+			
+			$("#showMessage").text(length);
+			$("#showMessage1").text(length+"条消息");
+		$(data).each(function(i,n){	
+
+			$("#messageList").append('<li><a href="#" class="clearfix">'+
+					'<img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="'+n.to_person.username+'" />'+
+					'<span class="msg-body">'+
+					'<span class="msg-title">'+
+							'<span class="blue">'+n.to_person.username+': </span>'+n.content+'</span>'+
+						'<span class="msg-time">'+
+							'<i class="ace-icon fa fa-clock-o"></i>'+
+							'<span>'+n.date+'</span></span></span></a></li>');
+		});
+	},"json");	
+	})
 </script>
 </head>
 <body class="no-skin">
@@ -53,101 +72,17 @@
           <li class="green dropdown-modal" >
 			  <a data-toggle="dropdown" class="dropdown-toggle" href="#"> 
 				  <i class="ace-icon fa fa-envelope icon-animated-vertical"></i>
-				  <span class="badge badge-success">5</span>
+				  <span class="badge badge-success" id="showMessage"></span>
           		</a>
 
             <ul
               class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
              	 <li class="dropdown-header"><i
-                class="icon-envelope-alt"></i>5条消息
+                class="icon-envelope-alt" ></i><span id="showMessage1"></span>
 				  </li>
 				  
 					<li class="dropdown-content">
-									<ul class="dropdown-menu dropdown-navbar">
-										<li>
-											<a href="#" class="clearfix">
-												<img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="Alex's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Alex:</span>
-														Ciao sociis natoque penatibus et auctor ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>a moment ago</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="resource/assets/images/avatars/avatar3.png" class="msg-photo" alt="Susan's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Susan:</span>
-														Vestibulum id ligula porta felis euismod ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>20 minutes ago</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="resource/assets/images/avatars/avatar4.png" class="msg-photo" alt="Bob's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Bob:</span>
-														Nullam quis risus eget urna mollis ornare ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>3:15 pm</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="resource/assets/images/avatars/avatar2.png" class="msg-photo" alt="Kate's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Kate:</span>
-														Ciao sociis natoque eget urna mollis ornare ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>1:33 pm</span>
-													</span>
-												</span>
-											</a>
-										</li>
-
-										<li>
-											<a href="#" class="clearfix">
-												<img src="resource/assets/images/avatars/avatar5.png" class="msg-photo" alt="Fred's Avatar" />
-												<span class="msg-body">
-													<span class="msg-title">
-														<span class="blue">Fred:</span>
-														Vestibulum id penatibus et auctor  ...
-													</span>
-
-													<span class="msg-time">
-														<i class="ace-icon fa fa-clock-o"></i>
-														<span>10:09 am</span>
-													</span>
-												</span>
-											</a>
-										</li>
+									<ul class="dropdown-menu dropdown-navbar" id="messageList">
 									</ul>
 								</li>
 								
