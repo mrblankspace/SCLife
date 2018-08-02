@@ -27,6 +27,9 @@ public class MessageServlet extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
 		HttpSession httpSession = request.getSession();
 		User user = (User)httpSession.getAttribute("user");
 		String flag = request.getParameter("flag");

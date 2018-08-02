@@ -7,6 +7,7 @@ import cn.swpu.dao.UserDao;
 import cn.swpu.dao.impl.OrderDaoImpl;
 import cn.swpu.dao.impl.UserDaoImpl;
 import cn.swpu.entity.Order;
+import cn.swpu.entity.User;
 import cn.swpu.service.OrderService;
 
 public class OrderServiceImpl implements OrderService {
@@ -75,5 +76,17 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> queryByOrderReward(String nature)
 	{
 		return od.queryByOrderReward(nature);
+	}
+	
+	
+	@Override
+	public List<Order> findBySendId(User user) {
+		// TODO Auto-generated method stub
+		return od.showMySendOrder(user);
+	}
+	@Override
+	public List<Order> findByAcptId(User user) {
+		// TODO Auto-generated method stub
+		return od.showMyAcpOrder(user);
 	}
 }

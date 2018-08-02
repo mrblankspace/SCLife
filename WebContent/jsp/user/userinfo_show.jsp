@@ -1,6 +1,9 @@
+﻿<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-     <%@page import="cn.swpu.entity.User"%>
+     <%@page import="cn.swpu.entity.*"%>
+     <%@page import="java.util.List" %>
+     <%@ taglib prefix="d" uri="http://displaytag.sf.net"%>
      
 <%
   //获取绝对路径路径 
@@ -10,9 +13,9 @@
         + path + "/";
 %> 
 <!DOCTYPE html>
-<base href="<%=basePath %>" />
 <html>
 <head>
+<base href="<%=basePath %>" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>我的信息</title>
@@ -98,30 +101,32 @@
       
 <div class="list-group">
   <h5 class="page-header alert-info"
-      style="margin: 0px; padding: 10px; margin-bottom: 10px;">我的发布</h5>
+      style="margin: 0px; padding: 10px; margin-bottom: 10px;">我发布的单</h5>
 	<div class="row" style="padding: 15px;">		
-			 <d:table name="" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
-        <d:column property="class_id" title="订单类型"></d:column>
-        <d:column property="order_describe" title="需求描述"></d:column>
+	    <d:table name="${listBySendId}" pagesize="5" requestURI="http://localhost:8080/SCLife/OrderServlet?flag=findOrderByUser" class="table table-hover table-striped table-bordered">
+        <d:column property="catagory" title="订单类型"></d:column>
+        <d:column property="accept_person.username" title="接单人"></d:column>
+         <d:column property="describe" title="订单描述"></d:column>
         <d:column property="order_money" title="赏金"></d:column>
         <d:column property="order_status" title="订单状态"></d:column>
-        <d:column property="order_status" title="图书类型"></d:column>
-        <d:column property="order_date" title="发布时间"></d:column>         
-        <d:column href="" paramId="order_id" paramProperty="bookId" title="我要接单" value="${order_id }"></d:column>
+        <d:column property="order_date" title="发布时间"></d:column>  
+        <d:column property="finish_date" title="完成时间"></d:column>    
       </d:table>
 		</div>
 </div>
+
+
 <h5 class="page-header alert-info"
       style="margin: 0px; padding: 10px; margin-bottom: 10px;">我接过的单</h5>
 		<div class="row" style="padding: 15px;">		
-			 <d:table name="" pagesize="5" requestURI="" class="table table-hover table-striped table-bordered">
-        <d:column property="class_id" title="订单类型"></d:column>
-        <d:column property="order_describe" title="需求描述"></d:column>
+			 <d:table name="${listByAcptId}" pagesize="5" requestURI="http://localhost:8080/SCLife/OrderServlet?flag=findOrderByUser" class="table table-hover table-striped table-bordered">
+         <d:column property="catagory" title="订单类型"></d:column>
+        <d:column property="send_person.username" title="发单人"></d:column>
+        <d:column property="describe" title="订单描述"></d:column>
         <d:column property="order_money" title="赏金"></d:column>
         <d:column property="order_status" title="订单状态"></d:column>
-        <d:column property="order_status" title="图书类型"></d:column>
-        <d:column property="order_date" title="发布时间"></d:column>         
-        <d:column href="" paramId="order_id" paramProperty="bookId" title="我要接单" value="${order_id }"></d:column>
+        <d:column property="order_date" title="发布时间"></d:column>  
+        <d:column property="finish_date" title="完成时间"></d:column>   
       </d:table>
 		</div>
 

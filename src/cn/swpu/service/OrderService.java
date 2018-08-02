@@ -3,6 +3,7 @@ package cn.swpu.service;
 import java.util.List;
 
 import cn.swpu.entity.Order;
+import cn.swpu.entity.User;
 
 public interface OrderService {
 	public List<Order> ShowOrder();
@@ -20,6 +21,9 @@ public interface OrderService {
 	public List<Order> queryByOrderStatus(String nature);
 	public List<Order> queryByOrdertime(String nature);
 	public List<Order> queryByOrderReward(String nature);
+	
+	public List<Order> findBySendId(User user);
+	public List<Order> findByAcptId(User user);
 	
 
 }

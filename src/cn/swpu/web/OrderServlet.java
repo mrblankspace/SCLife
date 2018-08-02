@@ -1,6 +1,8 @@
 package cn.swpu.web;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -10,9 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import cn.swpu.entity.Message;
 import cn.swpu.entity.Order;
 import cn.swpu.entity.User;
+import cn.swpu.service.MessageService;
 import cn.swpu.service.OrderService;
+import cn.swpu.service.impl.MessageServiceImpl;
 import cn.swpu.service.impl.OrderServiceImpl;
 
 /**
@@ -22,6 +27,7 @@ import cn.swpu.service.impl.OrderServiceImpl;
 public class OrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private OrderService orderService = new OrderServiceImpl();
+	private MessageService messageService = new MessageServiceImpl();
 	HttpSession httpSession;
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,6 +65,14 @@ public class OrderServlet extends HttpServlet {
 			int order_id=Integer.parseInt(request.getParameter("order_id"));//获取订单id
 			OrderService os=new OrderServiceImpl();
 			Order tempOrder=os.GetOrderById(order_id);//获得id对应的订单,此订单有所有信息，除了接单人，完成时间，
+			Message message = new Message();
+			message.setContent("有人接单啦");
+			Date date = new Date();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			message.setDate(simpleDateFormat.format(date));
+			message.setTo_person(tempOrder.getSend_person());
+			message.setStatus("未读");
+			messageService.saveMessage(message);
 			tempOrder.setAccept_person(user);//设置接单人
 			tempOrder.setOrder_status("已接收");
 			int result=os.UpdateOrder(tempOrder);//更新数据库，传入接单人实例，update方法中将接单人实例的id读取并读入数据库
@@ -97,6 +111,14 @@ public class OrderServlet extends HttpServlet {
 				request.setAttribute("list", list);
 				request.getRequestDispatcher("jsp/order/orderinfo_list.jsp").forward(request, response);
 			}
+		}else if("findOrderByUser".equals(request.getParameter("flag"))) {
+			httpSession=request.getSession();
+			User user=(User) httpSession.getAttribute("user");
+			List<Order> list1=orderService.findBySendId(user);
+			List<Order> list2=orderService.findByAcptId(user);
+			request.setAttribute("listBySendId", list1);
+			request.setAttribute("listByAcptId", list2);
+			request.getRequestDispatcher("jsp/user/userinfo_show.jsp").forward(request, response);
 		}
 	}
 	

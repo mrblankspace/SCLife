@@ -35,7 +35,7 @@
 										</h4>
 
 										<div class="space-6"></div>
-										<form action="LoginServlet?flag=login" method="post" onsubmit="return check()">
+										<form action="LoginServlet?flag=login" method="post" onsubmit="">
 											<fieldset>
 												<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userId"

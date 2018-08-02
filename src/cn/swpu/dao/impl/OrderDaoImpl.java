@@ -460,6 +460,107 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		return list;
 	}
+	
+	
+	//7.30新增获取用户接过的单和发过的单
+		public List<Order> showMySendOrder(User user)
+		{
+			List<Order> list=new ArrayList<Order>();//创建User集合保存遍历出的User对象们
+			DbUtil du=new DbUtil();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			try {
+				Connection connection=du.getCon();
+				int send_id=user.getId();//获取该用户id,再到数据库内查询所有send_id匹配的order并添加到List中
+				String sql="select * from `order` where send_id=?";
+				pstmt=connection.prepareStatement(sql);
+				pstmt.setInt(1, send_id);
+				rs=pstmt.executeQuery();
+				while(rs.next())
+				{
+					Order order=new Order();
+					order.setOrder_id(rs.getInt("order_id"));
+					User sender = userDao.findById(rs.getInt("send_id"));
+					order.setSend_person(sender);
+					if (rs.getInt("accept_id")!=0) {
+						User accepter = userDao.findById(rs.getInt("send_id"));
+						order.setSend_person(accepter);
+					}
+					order.setCatagory(rs.getString("catagory"));
+					order.setDescribe(rs.getString("order_describe"));
+					order.setOrder_money(rs.getFloat("order_money"));
+					order.setOrder_status(rs.getString("order_status"));
+					order.setOrder_date(rs.getString("order_date"));
+					order.setFinish_date(rs.getString("finish_date"));
+					list.add(order);
+				}
+				
+				du.closeCon(connection);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					pstmt.close();
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return list;
+		}
+		
+		public List<Order> showMyAcpOrder(User user)
+		{
+			List<Order> list=new ArrayList<Order>();//创建User集合保存遍历出的User对象们
+			DbUtil du=new DbUtil();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			try {
+				Connection connection=du.getCon();
+				int accept_id=user.getId();//获取该用户id,再到数据库内查询所有send_id匹配的order并添加到List中
+				String sql="select * from `order` where accept_id=?";
+				pstmt=connection.prepareStatement(sql);
+				pstmt.setInt(1, accept_id);
+				rs=pstmt.executeQuery();
+				while(rs.next())
+				{
+					Order order=new Order();
+					order.setOrder_id(rs.getInt("order_id"));
+					User sender = userDao.findById(rs.getInt("send_id"));
+					order.setSend_person(sender);
+					if (rs.getInt("accept_id")!=0) {
+						User accepter = userDao.findById(rs.getInt("send_id"));
+						order.setSend_person(accepter);
+					}
+					order.setCatagory(rs.getString("catagory"));
+					order.setDescribe(rs.getString("order_describe"));
+					order.setOrder_money(rs.getFloat("order_money"));
+					order.setOrder_status(rs.getString("order_status"));
+					order.setOrder_date(rs.getString("order_date"));
+					order.setFinish_date(rs.getString("finish_date"));
+					list.add(order);
+				}
+				
+				du.closeCon(connection);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					pstmt.close();
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			return list;
+		}
+
 }
 
 

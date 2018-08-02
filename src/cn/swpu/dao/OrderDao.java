@@ -3,6 +3,7 @@ package cn.swpu.dao;
 import java.util.List;
 
 import cn.swpu.entity.Order;
+import cn.swpu.entity.User;
 
 public interface OrderDao {
 	public List<Order> showOrder();
@@ -24,4 +25,8 @@ public interface OrderDao {
 	public List<Order> queryByOrderStatus(String nature);
 	public List<Order> queryByOrdertime(String nature);
 	public List<Order> queryByOrderReward(String nature);
+	
+	
+	public List<Order> showMyAcpOrder(User user);
+	public List<Order> showMySendOrder(User user);
 }

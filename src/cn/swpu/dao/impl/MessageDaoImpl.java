@@ -17,15 +17,20 @@ public class MessageDaoImpl implements MessageDao{
 	private Connection connection;
 	private PreparedStatement preparedStatement;
 	private UserDao userDao = new UserDaoImpl();
-
+	
+	
+	/**
+	 * 查询用户未读消息
+	 */
 	public List<Message> queryMessageByUserId(int id) {
 		// TODO Auto-generated method stub
 		ArrayList<Message> list = new ArrayList<Message>();
 		try {
 			connection = dbUtil.getCon();
-			String sql = "select *  from message where to_person_id=?";
+			String sql = "select *  from message where to_person_id=? and status=?";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1,id);
+			preparedStatement.setString(2,"未读");
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()){
 				Message message = new Message();

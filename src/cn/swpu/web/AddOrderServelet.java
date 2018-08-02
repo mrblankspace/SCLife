@@ -24,15 +24,12 @@ public class AddOrderServelet extends HttpServlet {
         super();
         
     }
-
-	
        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException ,IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");		
 		Order or=(Order)request.getSession().getAttribute("order");
 		OrderDaoImpl odimpl=new   OrderDaoImpl(); 
 		odimpl.addOrder(or);
-		
 	}
 
 }

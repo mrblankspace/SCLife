@@ -16,10 +16,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>订单查询</title>
-<link href="resource/css/bootstrap.min.css" rel="stylesheet" />
-<script type="text/javascript" src="resource/js/jquery.min.js"></script>
-<script type="text/javascript" src="resource/js/bootstrap.min.js"></script>
 
+<link href="resource/css/bootstrap.min.css" rel="stylesheet" />
+<!-- 
+<script type="text/javascript" src="resource/assets/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="resource/js/bootstrap.min.js"></script>
+-->
 </head>
 <body>
 	<div>
