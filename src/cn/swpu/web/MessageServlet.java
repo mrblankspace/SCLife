@@ -38,6 +38,9 @@ public class MessageServlet extends HttpServlet {
 			JsonConfig jsonConfig = new JsonConfig();
 			JSONArray jsonArray = JSONArray.fromObject(messagesList,jsonConfig);
 			response.getWriter().println(jsonArray.toString());
+		}else if("readMessage".equals(flag)){
+			int messageId = Integer.parseInt(request.getParameter("messageId"));
+			messageService.readMessage(messageId);
 		}
 	}
        

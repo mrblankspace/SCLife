@@ -65,22 +65,36 @@ public class OrderServlet extends HttpServlet {
 			int order_id=Integer.parseInt(request.getParameter("order_id"));//获取订单id
 			OrderService os=new OrderServiceImpl();
 			Order tempOrder=os.GetOrderById(order_id);//获得id对应的订单,此订单有所有信息，除了接单人，完成时间，
-			Message message = new Message();
-			message.setContent("有人接单啦");
-			Date date = new Date();
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			message.setDate(simpleDateFormat.format(date));
-			message.setTo_person(tempOrder.getSend_person());
-			message.setStatus("未读");
-			messageService.saveMessage(message);
-			tempOrder.setAccept_person(user);//设置接单人
-			tempOrder.setOrder_status("已接收");
-			int result=os.UpdateOrder(tempOrder);//更新数据库，传入接单人实例，update方法中将接单人实例的id读取并读入数据库
-			if(result!=0)
+			if(tempOrder.getOrder_id()==0)
 			{
+				//未找到单，跳转到其他页面
+				System.out.println("not found this order!");
 				request.getRequestDispatcher("jsp/order/accept_order_success.jsp").forward(request, response);
 			}
-			
+			else if(tempOrder.getOrder_status().equals("已接收"))
+			{
+				request.getRequestDispatcher("jsp/order/Order_had_been_accepted.jsp").forward(request, response);
+			}
+			else{
+				Message message = new Message();
+				message.setContent("亲，我已接收你的单子");
+				
+				Date date = new Date();
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				message.setDate(simpleDateFormat.format(date));
+				
+				message.setTo_person(tempOrder.getSend_person());
+				message.setFrom_person(user);
+				message.setStatus("未读");
+				messageService.saveMessage(message);
+				tempOrder.setAccept_person(user);//设置接单人
+				tempOrder.setOrder_status("已接收");
+				int result=os.UpdateOrder(tempOrder);//更新数据库，传入接单人实例，update方法中将接单人实例的id读取并读入数据库
+				if(result!=0)
+				{
+					request.getRequestDispatcher("main.jsp").forward(request, response);
+				}
+			}
 		}else if("query".equals(request.getParameter("flag")))
 		{
 			String name=(String)request.getParameter("condition");
@@ -119,6 +133,17 @@ public class OrderServlet extends HttpServlet {
 			request.setAttribute("listBySendId", list1);
 			request.setAttribute("listByAcptId", list2);
 			request.getRequestDispatcher("jsp/user/userinfo_show.jsp").forward(request, response);
+		}else if("deleteOrder".equals(request.getParameter("flag")))
+		{
+			int order_id=Integer.parseInt(request.getParameter("order_id"));
+			OrderService os=new OrderServiceImpl();
+			Order order=os.GetOrderById(order_id);//获得id对应的订单,此订单有所有信息，除了接单人，完成时间，
+			int row=orderService.DeleteOrder(order);
+			if(row!=0)
+			{
+				System.out.println("delete success");
+				request.getRequestDispatcher("OrderServlet?flag=findOrder_index").forward(request, response);
+			}
 		}
 	}
 	

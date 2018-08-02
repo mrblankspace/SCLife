@@ -12,4 +12,13 @@ public interface UserDao {
 	public int updateUser(User user);//更新用户信息
 	public User findById(int id);
 	public User queryUserById(User user);//通过用户id获得用户所有信息
+	
+	/**
+	 * 模糊查询相关用户
+	 * kong 8.1
+	 */
+	
+	public List<User> queryByUsername(String nature);
+	public List<User> queryByAddress(String nature);
+	public List<User> queryByEmail(String nature);
 }

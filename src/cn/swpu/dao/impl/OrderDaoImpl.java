@@ -76,7 +76,7 @@ public class OrderDaoImpl implements OrderDao {
 		try {
 			Connection con=du.getCon();
 			stmt=con.createStatement();
-			String sql="select * from SCLife.order";
+			String sql="select * from SCLife.order where order_status!=('已接单')";
 			rs=stmt.executeQuery(sql);//返回结果
 			while(rs.next())//当rs.next()有结果循环给List添加进User对象
 			{
@@ -287,9 +287,8 @@ public class OrderDaoImpl implements OrderDao {
 		ResultSet rs=null;
 		try {
 			Connection con=du.getCon();
-			stmt=con.prepareStatement("select * from SCLife.order where catagory=? and order_status=?");
+			stmt=con.prepareStatement("select * from SCLife.order where catagory=?");
 			stmt.setString(1, requirement);
-			stmt.setString(2, "未完成");
 			rs=stmt.executeQuery();//返回结果
 			while(rs.next())//当rs.next()有结果循环给List添加进User对象
 			{

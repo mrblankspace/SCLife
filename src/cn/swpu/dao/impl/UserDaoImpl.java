@@ -315,4 +315,73 @@ public class UserDaoImpl implements UserDao{
 		return daoUser;
 	}
 	
+	/**
+	 * 模糊查询相关用户
+	 * kong8.1
+	 */
+	public List<User> queryByNature(String nature,String sql)
+	{
+		List<User> list=new ArrayList<User>();//创建User集合保存遍历出的User对象们
+		DbUtil du=new DbUtil();
+		PreparedStatement stmt=null;
+		ResultSet rs=null;
+		try {
+			Connection con=du.getCon();
+			stmt=con.prepareStatement(sql);
+			stmt.setString(1,"%"+nature+"%");
+			rs=stmt.executeQuery();//返回结果
+			
+			while(rs.next())//当rs.next()有结果循环给List添加进list对象
+			{
+				User user=new User();
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+				user.setEmail(rs.getString("email"));
+				user.setAddress(rs.getString("address"));
+				user.setTel(rs.getString("tel"));
+				user.setIdentityId(rs.getInt("identityId"));
+				list.add(user);
+			}
+			
+			du.closeCon(con);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				stmt.close();
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		return list;
+		
+	}
+	
+	public List<User> queryByUsername(String nature)
+	{
+		String sql="select * from SCLife.user where username like ?";
+		return queryByNature(nature, sql);
+	}
+	
+	public List<User> queryByAddress(String nature)
+	{
+		String sql="select * from SCLife.user where address like ?";
+		return queryByNature(nature, sql);
+	}
+	
+	public List<User> queryByEmail(String nature)
+	{
+		String sql="select * from SCLife.user where email like ?";
+		return queryByNature(nature, sql);
+	}
+	
+	
 }

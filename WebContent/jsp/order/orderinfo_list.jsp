@@ -16,12 +16,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>订单查询</title>
-
-<link href="resource/css/bootstrap.min.css" rel="stylesheet" />
-<!-- 
-<script type="text/javascript" src="resource/assets/js/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="resource/js/bootstrap.min.js"></script>
--->
+<link href="../resource/css/bootstrap.min.css" rel="stylesheet" />
+<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
+<script type="text/javascript"
+	src="../resource/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<div>
@@ -53,10 +51,9 @@
         <d:column property="order_status" title="订单状态"></d:column>
         <d:column property="order_date" title="发布时间"></d:column>
         <d:column property="finish_date" title="完成时间"></d:column>         
-        <d:column href="OrderServlet?flag=aceptOrder" paramId="order_id" paramProperty="order_id" title="我要接单" value="我要接单"></d:column>
-        <%User user = (User)session.getAttribute("user"); %>
-          <%if(user!=null&&user.getIdentityId()==1){%><d:column href="" paramId="order_id" paramProperty="order_id" title="删除" value="删除"></d:column>
-          <%}%>
+        <%User user = (User)session.getAttribute("user"); %>  
+       	<%if(user!=null&&user.getIdentityId()==0){%><d:column href="OrderServlet?flag=aceptOrder" paramId="order_id" paramProperty="order_id" title="我要接单" value="我要接单"></d:column><%} %>
+        <%if(user!=null&&user.getIdentityId()==1){%><a onclick="myFunction()"><d:column href="OrderServlet?flag=deleteOrder" paramId="order_id" paramProperty="order_id" title="删除" value="删除"  ></d:column></a><%} %>
       </d:table>
 		</div>
 	</form>

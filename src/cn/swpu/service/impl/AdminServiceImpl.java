@@ -16,4 +16,32 @@ public class AdminServiceImpl implements AdminService{
 		return UserDao.queryAllUsers();
 	}
 	
+
+	/**
+	 * 模糊查询相关用户
+	 * kong8.1
+	 */
+	
+	public List<User> queryByUsername(String nature)
+	{
+		return UserDao.queryByUsername(nature);
+	}
+	public List<User> queryByAddress(String nature)
+	{
+		return UserDao.queryByAddress(nature);
+	}
+	public List<User> queryByEmail(String nature)
+	{
+		return UserDao.queryByEmail(nature); 
+		
+	}
+	
+	/**
+	 * kong8.1
+	 */
+	public User findById(int id)
+	{
+		return UserDao.findById(id);
+	}
+	
 }

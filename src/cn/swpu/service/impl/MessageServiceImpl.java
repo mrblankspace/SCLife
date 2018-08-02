@@ -26,5 +26,10 @@ public class MessageServiceImpl implements MessageService{
 		// TODO Auto-generated method stub
 		return messageDao.queryMessageByUserId(id);
 	}
+
+	public void readMessage(int messageId) {
+		// TODO Auto-generated method stub
+		messageDao.readMessage(messageId);
+	}
 	
 }

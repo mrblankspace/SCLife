@@ -4,6 +4,7 @@ public class Message {
 	private Integer id; 
 	private String content;
 	private User to_person;
+	private User from_person;
 	private String status;
 	private String date;
 	public Integer getId() {
@@ -36,7 +37,10 @@ public class Message {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	
-	
-	
+	public User getFrom_person() {
+		return from_person;
+	}
+	public void setFrom_person(User from_person) {
+		this.from_person = from_person;
+	}
 }

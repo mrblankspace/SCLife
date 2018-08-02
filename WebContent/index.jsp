@@ -9,37 +9,38 @@
 <meta charset="utf-8" />
 <link href="resource/assets/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="resource/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-<!-- text fonts -->
 <link rel="stylesheet" href="resource/assets/css/fonts.googleapis.com.css" />
 <link rel="stylesheet" href="resource/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 <link rel="stylesheet" href="resource/assets/css/ace-rtl.min.css" />
 <link rel="stylesheet" href="resource/assets/css/ace-skins.min.css" />
 <script src="resource/assets/js/ace-extra.min.js"></script>
 <script src="resource/assets/js/jquery-2.1.4.min.js"></script>
-<script src="resource/assets/js/bootstrap.min.js"></script>
-<script src="resource/assets/js/typeahead-bs2.min.js"></script>
 <script>	
 	//阅读消息
-	function readMessage(){
-		window.alert(1111);
-	//	var a = $("#messageList > input:hidden").val();
-		////window.alert(a);
+	function readMessage(messageId){
+		//var a = $("#messageList > input:hidden").val();
+		window.alert(messageId);
+		$.post("${pageContext.request.contextPath }/MessageServlet?flag=readMessage",{"messageId":messageId},function(){
+			window.alert("messageId"+messageId);
+		},"json");
 	}
+	//点击特定消息后触发
 	function test(atag){
 		$("#messageBox").modal("show");
-		window.alert($(atag).children("input").val());
+	//	window.alert($(atag).children("input").val());
+		readMessage($(atag).children("input").val());
 	}
 	$(function(){
 	     	$.post("${pageContext.request.contextPath }/MessageServlet?flag=queryMessage",function(data){
 			var length = data.length;
 			$("#showMessage").text(length);
-			$("#showMessage1").text(length+"条消息");
+			$("#showMessage1").text(length+"条未读消息");
 			$(data).each(function(i,n){	
 			$("#messageList").append('<li><a href="javascript:void(0)" onclick="test(this)" class="clearfix">'+
 					'<input type="hidden" name="message_id" value="'+n.id+'"><img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="'+n.to_person.username+'" />'+
 					'<span class="msg-body">'+
 					'<span class="msg-title">'+
-							'<span class="blue">'+n.to_person.username+': </span>'+n.content+'</span>'+
+							'<span class="blue">'+n.from_person.username+': </span>'+n.content+'</span>'+
 						'<span class="msg-time">'+
 							'<i class="ace-icon fa fa-clock-o"></i>'+
 							'<span>'+n.date+'</span></span></span></a></li>');
@@ -58,7 +59,6 @@
 </script>
 </head>
 <body class="no-skin">
-
   <div class="navbar navbar-default ace-save-state" id="navbar">
     <script type="text/javascript">
 					try {
@@ -66,7 +66,6 @@
 					} catch (e) {
 					}
 				</script>
-
     <div class="navbar-container ace-save-state" id="navbar-container">
         <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
 					<span class="sr-only">Toggle sidebar</span>
@@ -82,7 +81,6 @@
             <i class="fa fa-leaf"></i> 校园生活系统
         </small>
         </a>
-        <!-- /.brand -->
       </div>
       <!-- /.navbar-header -->
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
@@ -93,31 +91,23 @@
 				  <span class="badge badge-success" id="showMessage"></span>
           		</a>
 
-            <ul
-              class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+               <ul
+              class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
              	 <li class="dropdown-header"><i
                 class="icon-envelope-alt" ></i><span id="showMessage1"></span>
 				  </li>
-				  
-					 <li class="dropdown-content">
-								<ul class="dropdown-menu dropdown-navbar" id="messageList">
-								</ul>
-					 </li>
-				
-                
+				  <li class="dropdown-content">
+						<ul class="dropdown-menu dropdown-navbar" id="messageList">
+				        </ul>
+				 </li>
                  <li class="dropdown-footer">
                   <a href="inbox.html">
                     See all messages
                     <i class="ace-icon fa fa-arrow-right"></i>
                   </a>
-                </li>
-
-									
-
-								
-				  
+                </li> 
             </ul>
-			</li>
+		 </li>
 
           <li class="light-blue dropdown-modal"><a data-toggle="dropdown" href="#"
             class="dropdown-toggle"> <img class="nav-user-photo"
@@ -142,7 +132,7 @@
                                          
               <li class="divider"></li>
 
-              <li><a href="system/user/logout"> <i
+              <li><a href="login.jsp"> <i
                   class="ace-icon fa fa-power-off"></i> 退出
               </a></li>
             </ul></li>
@@ -430,21 +420,10 @@
 		</script>
 
 
-  <!-- page specific plugin scripts -->
 
-  <!--[if lte IE 8]>
-		  <script src="resource/assets/js/excanvas.min.js"></script>
-		<![endif]-->
 
-  <script src="resource/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
-  <script src="resource/assets/js/jquery.ui.touch-punch.min.js"></script>
-  <script src="resource/assets/js/jquery.slimscroll.min.js"></script>
-  <script src="resource/assets/js/jquery.easy-pie-chart.min.js"></script>
-  <script src="resource/assets/js/jquery.sparkline.min.js"></script>
-  <script src="resource/assets/js/flot/jquery.flot.min.js"></script>
-  <script src="resource/assets/js/flot/jquery.flot.pie.min.js"></script>
-  <script src="resource/assets/js/flot/jquery.flot.resize.min.js"></script>
-
+<script src="resource/assets/js/bootstrap.min.js"></script>
+<script src="resource/assets/js/typeahead-bs2.min.js"></script>
   <!-- ace scripts -->
 
   <script src="resource/assets/js/ace-elements.min.js"></script>

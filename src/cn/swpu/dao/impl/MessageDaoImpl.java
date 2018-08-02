@@ -39,6 +39,7 @@ public class MessageDaoImpl implements MessageDao{
 				message.setContent(rs.getString("content"));
 				message.setStatus(rs.getString("status"));
 				message.setTo_person(userDao.findById(rs.getInt("to_person_id")));
+				message.setFrom_person(userDao.findById(rs.getInt("from_person_id")));
 				list.add(message);
 			}
 		} catch (ClassNotFoundException e) {
@@ -55,12 +56,13 @@ public class MessageDaoImpl implements MessageDao{
 		// TODO Auto-generated method stub
 		try {
 			connection = dbUtil.getCon();
-			String sql = "insert into message (content, to_person_id, status, date) values(?,?,?,?)";
+			String sql = "insert into message (content, to_person_id, status, date, from_person_id) values(?,?,?,?,?)";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, message.getContent());
 			preparedStatement.setInt(2, message.getTo_person().getId());
 			preparedStatement.setString(3, message.getStatus());
 			preparedStatement.setString(4, message.getDate());
+			preparedStatement.setInt(5, message.getFrom_person().getId());
 			preparedStatement.execute();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -105,6 +107,31 @@ public class MessageDaoImpl implements MessageDao{
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public void readMessage(int messageId) {
+		// TODO Auto-generated method stub
+		try {
+			Connection connection = dbUtil.getCon();
+			String sql = "update message set status='已读' where id=?";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, messageId);
+			preparedStatement.execute();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

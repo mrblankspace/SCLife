@@ -8,4 +8,5 @@ public interface MessageDao {
 	public void saveMessage(Message message);
 	public void deleteMessage(Message message);
 	public List<Message> queryMessageByUserId(int id);
+	public void readMessage(int messageId);
 }
