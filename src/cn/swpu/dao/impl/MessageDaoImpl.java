@@ -14,10 +14,9 @@ import cn.swpu.util.DbUtil;
 
 public class MessageDaoImpl implements MessageDao{
 	private DbUtil dbUtil = new DbUtil();
-	private Connection connection;
-	private PreparedStatement preparedStatement;
+	//private Connection connection;
+	//private PreparedStatement preparedStatement;
 	private UserDao userDao = new UserDaoImpl();
-	
 	
 	/**
 	 * 查询用户未读消息
@@ -25,7 +24,9 @@ public class MessageDaoImpl implements MessageDao{
 	public List<Message> queryMessageByUserId(int id) {
 		// TODO Auto-generated method stub
 		ArrayList<Message> list = new ArrayList<Message>();
-		try {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		try {		
 			connection = dbUtil.getCon();
 			String sql = "select *  from message where to_person_id=? and status=?";
 			preparedStatement = connection.prepareStatement(sql);
@@ -42,24 +43,25 @@ public class MessageDaoImpl implements MessageDao{
 				message.setFrom_person(userDao.findById(rs.getInt("from_person_id")));
 				list.add(message);
 			}
-		} catch (ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
 			try {
+				preparedStatement.close();
 				connection.close();
-			} catch (SQLException e1) {
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				e.printStackTrace();
 			}
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return list;
 	}
 
 	public void saveMessage(Message message) {
 		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = dbUtil.getCon();
 			String sql = "insert into message (content, to_person_id, status, date, from_person_id) values(?,?,?,?,?)";
@@ -70,29 +72,23 @@ public class MessageDaoImpl implements MessageDao{
 			preparedStatement.setString(4, message.getDate());
 			preparedStatement.setInt(5, message.getFrom_person().getId());
 			preparedStatement.execute();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}finally {
 			try {
+				preparedStatement.close();
 				connection.close();
-			} catch (SQLException e1) {
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				try {
-					connection.close();
-				} catch (SQLException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				e1.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 	}
 
 	public void deleteMessage(Message message) {
 		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
 			connection = dbUtil.getCon();
 			String sql = "delete from message where id=?";
@@ -104,13 +100,15 @@ public class MessageDaoImpl implements MessageDao{
 			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			try {
-				connection.close();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
+		}finally {
+			try {
+				preparedStatement.close();
+				connection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}
@@ -118,8 +116,10 @@ public class MessageDaoImpl implements MessageDao{
 	@Override
 	public void readMessage(int messageId) {
 		// TODO Auto-generated method stub
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 		try {
-			Connection connection = dbUtil.getCon();
+			connection = dbUtil.getCon();
 			String sql = "update message set status='已读' where id=?";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1, messageId);
@@ -132,6 +132,7 @@ public class MessageDaoImpl implements MessageDao{
 			e.printStackTrace();
 		}finally {
 			try {
+				preparedStatement.close();
 				connection.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

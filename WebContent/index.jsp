@@ -23,8 +23,8 @@
 			var length = data.length;
 			$("#showMessage").text(length);
 			$("#showMessage1").text(length+"条未读消息");
-			$(data).each(function(i,n){	
 			$("#messageList").empty();
+			$(data).each(function(i,n){	
 			$("#messageList").append('<li><a href="javascript:void(0)" onclick="test(this)" class="clearfix">'+
 					'<input type="hidden" name="message_id" value="'+n.id+'"><img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="'+n.to_person.username+'" />'+
 					'<span class="msg-body">'+
