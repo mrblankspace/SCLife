@@ -43,6 +43,12 @@ public class MessageDaoImpl implements MessageDao{
 				list.add(message);
 			}
 		} catch (ClassNotFoundException e) {
+			try {
+				connection.close();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
