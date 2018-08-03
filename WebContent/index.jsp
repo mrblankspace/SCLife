@@ -15,7 +15,27 @@
 <link rel="stylesheet" href="resource/assets/css/ace-skins.min.css" />
 <script src="resource/assets/js/ace-extra.min.js"></script>
 <script src="resource/assets/js/jquery-2.1.4.min.js"></script>
-<script>	
+<script>
+	
+	//获取消息
+	function getMessage(){
+		$.post("${pageContext.request.contextPath }/MessageServlet?flag=queryMessage",function(data){
+			var length = data.length;
+			$("#showMessage").text(length);
+			$("#showMessage1").text(length+"条未读消息");
+			$(data).each(function(i,n){	
+			$("#messageList").empty();
+			$("#messageList").append('<li><a href="javascript:void(0)" onclick="test(this)" class="clearfix">'+
+					'<input type="hidden" name="message_id" value="'+n.id+'"><img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="'+n.to_person.username+'" />'+
+					'<span class="msg-body">'+
+					'<span class="msg-title">'+
+							'<span class="blue">'+n.from_person.username+': </span>'+n.content+'</span>'+
+						'<span class="msg-time">'+
+							'<i class="ace-icon fa fa-clock-o"></i>'+
+							'<span>'+n.date+'</span></span></span></a></li>');
+		});
+	},"json");	
+	}
 	//阅读消息
 	function readMessage(messageId){
 		//var a = $("#messageList > input:hidden").val();
@@ -30,22 +50,9 @@
 	//	window.alert($(atag).children("input").val());
 		readMessage($(atag).children("input").val());
 	}
+	
 	$(function(){
-	     	$.post("${pageContext.request.contextPath }/MessageServlet?flag=queryMessage",function(data){
-			var length = data.length;
-			$("#showMessage").text(length);
-			$("#showMessage1").text(length+"条未读消息");
-			$(data).each(function(i,n){	
-			$("#messageList").append('<li><a href="javascript:void(0)" onclick="test(this)" class="clearfix">'+
-					'<input type="hidden" name="message_id" value="'+n.id+'"><img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="'+n.to_person.username+'" />'+
-					'<span class="msg-body">'+
-					'<span class="msg-title">'+
-							'<span class="blue">'+n.from_person.username+': </span>'+n.content+'</span>'+
-						'<span class="msg-time">'+
-							'<i class="ace-icon fa fa-clock-o"></i>'+
-							'<span>'+n.date+'</span></span></span></a></li>');
-		});
-	},"json");	
+		 window.setInterval("getMessage()",1000);
 	})
 	
 	$(document).ready(function(){
