@@ -1,11 +1,16 @@
 ﻿package cn.swpu.entity;
+
+import java.sql.*;
+
+import cn.swpu.util.DbUtil;
+
 /**
  * 7.29 修改pojo到数据库的映射不再是简单数据类型
  * @author zhangbo
  *
  */
 public class Order {
-	private int order_id;      
+	private String order_id;      
 	private String catagory;		 //直接写死在里面吧  不用数据字典了
 	private String describe;
 	private float order_money;
@@ -14,10 +19,11 @@ public class Order {
 	private String order_status;    //直接写死在里面吧  不用数据字典了
 	private String order_date;			
 	private String finish_date;
-	public int getOrder_id() {
+	
+	public String getOrder_id() {
 		return order_id;
 	}
-	public void setOrder_id(int order_id) {
+	public void setOrder_id(String order_id) {
 		this.order_id = order_id;
 	}
 
@@ -75,6 +81,10 @@ public class Order {
 	public void setFinish_date(String finish_date) {
 		this.finish_date = finish_date;
 	}
+	
+	
+
+	
 	
 	
 

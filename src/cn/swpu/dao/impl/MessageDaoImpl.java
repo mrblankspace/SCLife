@@ -28,7 +28,7 @@ public class MessageDaoImpl implements MessageDao{
 		PreparedStatement preparedStatement = null;
 		try {		
 			connection = dbUtil.getCon();
-			String sql = "select *  from message where to_person_id=? and status=?";
+			String sql = "select * from message where to_person_id=? and status=?";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setInt(1,id);
 			preparedStatement.setString(2,"未读");
@@ -139,6 +139,51 @@ public class MessageDaoImpl implements MessageDao{
 				e.printStackTrace();
 			}
 		}
+	}
+	/**
+	 * 返回最新对话10条数据
+	 */
+	@Override
+	public List<Message> findDialogMessage(int user_id, int other_person_id) {
+			// TODO Auto-generated method stub
+			ArrayList<Message> list = new ArrayList<Message>();
+			Connection connection = null;
+			PreparedStatement preparedStatement = null;
+			try {		
+				connection = dbUtil.getCon();
+				String sql = "select * from "
+						+ "(select * from message where to_person_id=? and from_person_id=? or to_person_id=? and from_person_id=?  order by id desc limit 0, 9 )aa "
+						+ "order by date;";
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setInt(1,user_id);
+				preparedStatement.setInt(2,other_person_id);
+				preparedStatement.setInt(3,user_id);
+				preparedStatement.setInt(4,other_person_id);
+				ResultSet rs = preparedStatement.executeQuery();
+				while(rs.next()){
+					Message message = new Message();
+					message.setId(rs.getInt("id"));
+					message.setDate(rs.getString("date"));
+					message.setContent(rs.getString("content"));
+					message.setStatus(rs.getString("status"));
+					message.setTo_person(userDao.findById(rs.getInt("to_person_id")));
+					message.setFrom_person(userDao.findById(rs.getInt("from_person_id")));
+					list.add(message);
+				}
+			} catch (SQLException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				try {
+					preparedStatement.close();
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return list;
+		
 	}
 	
 }

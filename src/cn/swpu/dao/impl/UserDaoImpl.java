@@ -24,8 +24,9 @@ public class UserDaoImpl implements UserDao{
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
+		Connection con=null;
 		try {
-			Connection con=du.getCon();
+		    con=du.getCon();
 			String sql="select * from user where email=? and password=?";//传入邮箱和密码
 			pstmt=con.prepareStatement(sql);//先编译下一句接受参数
 			pstmt.setString(1, user.getEmail());//获取由
@@ -42,7 +43,7 @@ public class UserDaoImpl implements UserDao{
 				daoUser.setEmail(rs.getString("email"));
 				daoUser.setTel(rs.getString("tel"));
 			}
-			du.closeCon(con);//????
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -51,6 +52,7 @@ public class UserDaoImpl implements UserDao{
 			try {
 				rs.close();
 				pstmt.close();
+				du.closeCon(con);//????
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -63,6 +65,7 @@ public class UserDaoImpl implements UserDao{
 	 */
 	public int register(User user)
 	{
+
 		DbUtil du=new DbUtil();	
 		PreparedStatement pstmt = null;
 		
@@ -81,7 +84,7 @@ public class UserDaoImpl implements UserDao{
 			 */
 			int regIdenID=user.getIdentityId();//用户身份不能由用户选择
 			
-			String sql="insert into user (username,password,email,address,tel,identityId) values (?,?,?,?,?,'0')";//对应数据库字段，ID为自增量???order_number是否赋值，identityID是否为选择
+			String sql="insert into user (username,password,email,address,tel,identityId) values (?,?,?,?,?,'0')";//对应数据库字段，ID为自增量???user_number是否赋值，identityID是否为选择
 			pstmt=con.prepareStatement(sql);		
 			pstmt.setString(1, regName);//给sql语句赋值
 			pstmt.setString(2, regPwd);
@@ -117,8 +120,9 @@ public class UserDaoImpl implements UserDao{
 		DbUtil du=new DbUtil();
 		Statement stmt=null;
 		ResultSet rs=null;
+		Connection con=null;
 		try {
-			Connection con=du.getCon();
+			con=du.getCon();
 			stmt=con.createStatement();
 			String sql="select * from user";
 			rs=stmt.executeQuery(sql);//返回结果
@@ -134,7 +138,7 @@ public class UserDaoImpl implements UserDao{
 				user.setTel(rs.getString("tel"));
 				list.add(user);//给list添加User对象
 			}
-			du.closeCon(con);//?????
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -143,6 +147,7 @@ public class UserDaoImpl implements UserDao{
 			try {
 				rs.close();
 				stmt.close();
+				du.closeCon(con);//?????
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -159,16 +164,17 @@ public class UserDaoImpl implements UserDao{
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
 		int row=0;
+		Connection con= null;
 		try {
 			int delId=user.getId();
-			Connection con=du.getCon();
+			con=du.getCon();
 			String sql="delete from user where id=?";//通过传入用户的id删除
 			pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, delId);
 			
 			row=pstmt.executeUpdate();//接受返回受影响条数
 			
-			du.closeCon(con);
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -176,6 +182,7 @@ public class UserDaoImpl implements UserDao{
 		}finally {
 			try {
 				pstmt.close();
+				du.closeCon(con);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -236,8 +243,9 @@ public class UserDaoImpl implements UserDao{
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
+		Connection con = null;
 		try {
-			Connection con=du.getCon();
+			con = du.getCon();
 			String sql="select * from user where id=?";//传入邮箱和密码
 			pstmt=con.prepareStatement(sql);//先编译下一句接受参数
 			pstmt.setLong(1, id);//获取由
@@ -254,7 +262,7 @@ public class UserDaoImpl implements UserDao{
 				daoUser.setEmail(rs.getString("email"));
 				daoUser.setTel(rs.getString("tel"));
 			}
-			du.closeCon(con);//????
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -263,6 +271,7 @@ public class UserDaoImpl implements UserDao{
 			try {
 				rs.close();
 				pstmt.close();
+				du.closeCon(con);//????
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -282,8 +291,9 @@ public class UserDaoImpl implements UserDao{
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
+		Connection con= null;
 		try {
-			Connection con=du.getCon();
+			 con=du.getCon();
 			String sql="select * from user where id=? ";//传入邮箱和密码
 			pstmt=con.prepareStatement(sql);//先编译下一句接受参数
 			pstmt.setInt(1, user.getId());
@@ -299,7 +309,7 @@ public class UserDaoImpl implements UserDao{
 				daoUser.setEmail(rs.getString("email"));
 				daoUser.setTel(rs.getString("tel"));
 			}
-			du.closeCon(con);//????
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -308,6 +318,7 @@ public class UserDaoImpl implements UserDao{
 			try {
 				rs.close();
 				pstmt.close();
+				du.closeCon(con);//????
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -325,8 +336,9 @@ public class UserDaoImpl implements UserDao{
 		DbUtil du=new DbUtil();
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
+		Connection con=null;
 		try {
-			Connection con=du.getCon();
+			con=du.getCon();
 			stmt=con.prepareStatement(sql);
 			stmt.setString(1,"%"+nature+"%");
 			rs=stmt.executeQuery();//返回结果
@@ -344,7 +356,7 @@ public class UserDaoImpl implements UserDao{
 				list.add(user);
 			}
 			
-			du.closeCon(con);
+		
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -355,6 +367,7 @@ public class UserDaoImpl implements UserDao{
 			try {
 				stmt.close();
 				rs.close();
+				du.closeCon(con);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -16,7 +16,7 @@ public interface OrderService {
 	public List<Order> findJobOrder();
 	public List<Order> findWaibaoOrder();
 	
-	public Order GetOrderById(int id);
+	public Order GetOrderById(String  id);
 	public List<Order> queryByOrderType(String nature);
 	public List<Order> queryByOrderStatus(String nature);
 	public List<Order> queryByOrdertime(String nature);
@@ -24,6 +24,8 @@ public interface OrderService {
 	
 	public List<Order> findBySendId(User user);
 	public List<Order> findByAcptId(User user);
+	public String AutogetOrder_id() ;
+	
 	
 
 }

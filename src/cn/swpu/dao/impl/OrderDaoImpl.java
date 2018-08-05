@@ -22,7 +22,7 @@ public class OrderDaoImpl implements OrderDao {
 	private UserDao userDao = new UserDaoImpl();
 
 	//7.30新增通过id获取订单对象
-		public Order getOrderById(int id)
+		public Order getOrderById(String id)
 		{
 			DbUtil du=new DbUtil();
 			PreparedStatement pstmt=null;
@@ -32,12 +32,12 @@ public class OrderDaoImpl implements OrderDao {
 				Connection con=du.getCon();
 				String sql="select * from SCLife.order where order_id=?";
 				pstmt=con.prepareStatement(sql);
-				pstmt.setInt(1, id);
+				pstmt.setString(1, id);
 				rs=pstmt.executeQuery();
 			
 				while(rs.next())
 				{
-					order.setOrder_id(rs.getInt("order_id"));
+					order.setOrder_id(rs.getString("order_id"));
 					User sender = userDao.findById(rs.getInt("send_id"));
 					order.setSend_person(sender);
 					if (rs.getInt("accept_id")!=0) {
@@ -81,7 +81,7 @@ public class OrderDaoImpl implements OrderDao {
 			while(rs.next())//当rs.next()有结果循环给List添加进User对象
 			{
 				Order order=new Order();
-				order.setOrder_id(rs.getInt("order_id"));
+				order.setOrder_id(rs.getString("order_id"));
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
@@ -119,23 +119,23 @@ public class OrderDaoImpl implements OrderDao {
 		
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
-		
+	
 		int row=0;
-		try {
+		try {		
+			
 			Connection con=du.getCon();
 			/**
 			 * 最后三个参数默认设置为空，等待用户接单后重新update
 			 */
-			String sql="insert into SCLife.order (catagory,order_describe,order_money,send_id,order_status,order_date) values (?,?,?,?,?,?)";	  
-			
+			String sql="insert into SCLife.order (order_id,catagory,order_describe,order_money,send_id,order_status,order_date) values (?,?,?,?,?,?,?)";	  			
 			pstmt=con.prepareStatement(sql);
-			
-			pstmt.setString(1, order.getCatagory());
-			pstmt.setString(2, order.getDescribe());
-			pstmt.setFloat(3, order.getOrder_money());
-			pstmt.setInt(4, order.getSend_person().getId());
-			pstmt.setString(5, order.getOrder_status());
-			pstmt.setString(6, order.getOrder_date());
+			pstmt.setString(1, order.getOrder_id());
+			pstmt.setString(2, order.getCatagory());
+			pstmt.setString(3, order.getDescribe());
+			pstmt.setFloat(4, order.getOrder_money());
+			pstmt.setInt(5, order.getSend_person().getId());
+			pstmt.setString(6, order.getOrder_status());
+			pstmt.setString(7, order.getOrder_date());
 			
 						
 			row=pstmt.executeUpdate();
@@ -169,7 +169,7 @@ public class OrderDaoImpl implements OrderDao {
 			Connection con=du.getCon();
 			String sql="delete from order where id=?";//通过传入用户的id删除
 			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1,order.getOrder_id());
+			pstmt.setString(1,order.getOrder_id());
 			
 			row=pstmt.executeUpdate();//接受返回受影响条数
 			
@@ -188,84 +188,141 @@ public class OrderDaoImpl implements OrderDao {
 		return row;
 	}
 	
-	/*public int updateOrder(Order order)
-	{
-		DbUtil du=new DbUtil();
-		PreparedStatement pstmt=null;
-		int row=0;
-		try {
-			Connection con=du.getCon();
-			String sql="update user set catagory_id=?,order_describe=?,order_money=?,send_id=?,order_date=?,accept_id=?,order_status=?，finish_date=? where id=?";
-			pstmt=con.prepareStatement(sql);
-			pstmt.setInt(1, order.getOrder_id());
-			pstmt.setString(2, order.getDescribe());
-			pstmt.setFloat(3, order.getOrder_money());
-		//	pstmt.setInt(4, order.getSend_id());
-			pstmt.setString(5, order.getOrder_date());
-			pstmt.setString(6, order.getFinish_date());
-			pstmt.setString(7, order.getOrder_status());
-			pstmt.setString(8, order.getFinish_date());
-			pstmt.setInt(9, order.getOrder_id());
-			
-			pstmt.executeUpdate();
-			
-			du.closeCon(con);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
+	/**
+	 * 手动提交事务函数
+	 * @param conn
+	 */
+	//开始事务，如果手动提交修改为false
+		public static void beginTransaction(Connection conn) {
 			try {
-				pstmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
+			if(conn != null){
+				if(conn.getAutoCommit()){
+						conn.setAutoCommit(false);//手动提交
+				}
 			}
+					} catch (SQLException e) {}	
 		}
-		return row;
-	}
-*/
+	//提交事务
+		public static void commitTransaction(Connection conn) {
+			try {
+				if(conn != null){
+					if(conn.getAutoCommit()){
+							conn.commit();//手动提交
+					}
+				}
+						} catch (SQLException e) {}	
+			
+		}
+	//事务回滚，出现异常回滚事务	
+		public static void rollbackTransaction(Connection conn) {
+			try {
+				if (conn != null) {
+					if (!conn.getAutoCommit()) {
+						conn.rollback();
+					}
+				}
+			}catch(SQLException e) {}
+			
+		}
+	//状态恢复
+		public static void resetConnection(Connection conn) {
+			try {
+				if (conn != null) {
+					if (conn.getAutoCommit()) {
+						conn.setAutoCommit(false);
+					}else {
+						conn.setAutoCommit(true);
+					}
+				}
+			}catch(SQLException e) {}
+			
+		}
+	
 	public int updateOrder(Order order)
 	{
+		Order tempOrder=new Order();
+		Connection con=null;
 		DbUtil du=new DbUtil();
 		PreparedStatement pstmt=null;
+		PreparedStatement pstmt1=null;
+		ResultSet rs=null;
 		int row=0;
 		try {
-			Connection con=du.getCon();
-			String sql="update `order` set catagory=?,order_describe=?,order_money=?,send_id=?,order_date=?,accept_id=?,order_status=?,finish_date=? where order_id=?";
-			pstmt=con.prepareStatement(sql);
-			pstmt.setString(1, order.getCatagory());
-			pstmt.setString(2, order.getDescribe());
-			pstmt.setFloat(3, order.getOrder_money());
-			int send_id=order.getSend_person().getId();//获取发单人的id
-			pstmt.setInt(4, send_id);
-			pstmt.setString(5, order.getOrder_date());
-			int accept_id=order.getAccept_person().getId();//获取接单人的id
-			pstmt.setInt(6, accept_id);
-			pstmt.setString(7, order.getOrder_status());
-			pstmt.setString(8, order.getFinish_date());
-			pstmt.setInt(9, order.getOrder_id());
+			con=du.getCon();
+			beginTransaction(con);//开始事务
+			String sql1="select * from SCLife.order where order_id=? for update";//悲观锁
+			pstmt1 = con.prepareStatement(sql1);//执行查询语句
+			pstmt1.setString(1, order.getOrder_id());
+			rs = pstmt1.executeQuery();
+			if(!rs.next())
+			{
+				throw new RuntimeException();
+			}
+			else 
+			{
+				tempOrder.setOrder_id(rs.getString("order_id"));
+				User sender = userDao.findById(rs.getInt("send_id"));
+				tempOrder.setSend_person(sender);
+				if (rs.getInt("accept_id")!=0) {
+					User accepter = userDao.findById(rs.getInt("send_id"));
+					tempOrder.setSend_person(accepter);
+				}
+				tempOrder.setCatagory(rs.getString("catagory"));
+				tempOrder.setDescribe(rs.getString("order_describe"));
+				tempOrder.setOrder_money(rs.getFloat("order_money"));
+				tempOrder.setOrder_status(rs.getString("order_status"));
+				tempOrder.setOrder_date(rs.getString("order_date"));
+				tempOrder.setFinish_date(rs.getString("finish_date"));
+			}
 			
-			row=pstmt.executeUpdate();
+			if(tempOrder.getOrder_status().equals("已接收")||tempOrder.getOrder_status().equals("已完成"))
+			{
+				return row;//若查询到订单状态等于“已接收”或“已完成”，则返回row=0;表示此订单已经被接单或完成，不能执行更新；
+			}
+			else//若状态等于“已付押金”,则执行更新语句
+			{
+				String sql="update `order` set catagory=?,order_describe=?,order_money=?,send_id=?,order_date=?,accept_id=?,order_status=?,finish_date=? where order_id=?";
+				pstmt=con.prepareStatement(sql);
+				pstmt.setString(1, order.getCatagory());
+				pstmt.setString(2, order.getDescribe());
+				pstmt.setFloat(3, order.getOrder_money());
+				int send_id=order.getSend_person().getId();//获取发单人的id
+				pstmt.setInt(4, send_id);
+				pstmt.setString(5, order.getOrder_date());
+				int accept_id=order.getAccept_person().getId();//获取接单人的id
+				pstmt.setInt(6, accept_id);
+				pstmt.setString(7, order.getOrder_status());
+				pstmt.setString(8, order.getFinish_date());
+				pstmt.setString(9, order.getOrder_id());
+				
+				row=pstmt.executeUpdate();//若执行完成row=1；
+			}
 			
-			du.closeCon(con);
-		} catch (ClassNotFoundException e) {
+			commitTransaction(con);//提交事务
+			
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
+			rollbackTransaction(con);
+			throw new RuntimeException();
+		} finally {
 			try {
+				pstmt1.close();
 				pstmt.close();
-			} catch (SQLException e) {
+				rs.close();
+				resetConnection(con);
+				du.closeCon(con);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		
 		return row;
 	}
 
 	@Override
 	public List<Order> findWaimaiOrder() {
 		// TODO Auto-generated method stub
-		return findOrderByCondition("快递 外卖");
+		return findOrderByCondition("快递外卖");
 	}
 
 	@Override
@@ -293,7 +350,7 @@ public class OrderDaoImpl implements OrderDao {
 			while(rs.next())//当rs.next()有结果循环给List添加进User对象
 			{
 				Order order=new Order();
-				order.setOrder_id(rs.getInt("order_id"));
+				order.setOrder_id(rs.getString("order_id"));
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
@@ -353,7 +410,7 @@ public class OrderDaoImpl implements OrderDao {
 			while(rs.next())//当rs.next()有结果循环给List添加进list对象
 			{
 				Order order=new Order();
-				order.setOrder_id(rs.getInt("order_id"));
+				order.setOrder_id(rs.getString("order_id"));
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
@@ -424,7 +481,7 @@ public class OrderDaoImpl implements OrderDao {
 			while(rs.next())//当rs.next()有结果循环给List添加进list对象
 			{
 				Order order=new Order();
-				order.setOrder_id(rs.getInt("order_id"));
+				order.setOrder_id(rs.getString("order_id"));
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
@@ -478,7 +535,7 @@ public class OrderDaoImpl implements OrderDao {
 				while(rs.next())
 				{
 					Order order=new Order();
-					order.setOrder_id(rs.getInt("order_id"));
+					order.setOrder_id(rs.getString("order_id"));
 					User sender = userDao.findById(rs.getInt("send_id"));
 					order.setSend_person(sender);
 					if (rs.getInt("accept_id")!=0) {
@@ -512,6 +569,7 @@ public class OrderDaoImpl implements OrderDao {
 		}
 		
 		public List<Order> showMyAcpOrder(User user)
+
 		{
 			List<Order> list=new ArrayList<Order>();//创建User集合保存遍历出的User对象们
 			DbUtil du=new DbUtil();
@@ -527,7 +585,7 @@ public class OrderDaoImpl implements OrderDao {
 				while(rs.next())
 				{
 					Order order=new Order();
-					order.setOrder_id(rs.getInt("order_id"));
+					order.setOrder_id(rs.getString("order_id"));
 					User sender = userDao.findById(rs.getInt("send_id"));
 					order.setSend_person(sender);
 					if (rs.getInt("accept_id")!=0) {
@@ -558,6 +616,55 @@ public class OrderDaoImpl implements OrderDao {
 			}
 			
 			return list;
+		}
+		
+		/*
+		 * 8.3 李成洪
+		 * 自动生成order_id
+		 */
+		
+		public String AutogetOrder_id() 
+		{
+			DbUtil db=new DbUtil();
+			Connection con = null;
+			String  order_id=null;
+			try {
+				con = db.getCon();
+				PreparedStatement pStatement=null;
+				ResultSet rSet=null;
+				String sql="select * from SCLife.order";
+				pStatement=con.prepareStatement(sql);
+				rSet=pStatement.executeQuery();						
+				while(rSet.next())
+				{
+					order_id=rSet.getString("order_id");
+				}
+				
+				String str=order_id.substring(0, 3);
+				int num=Integer.parseInt(order_id.substring(3))+1;		
+				order_id=(str+num).toString();
+				System.out.println(order_id);
+				rSet.close();
+				pStatement.close();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				try {
+					db.closeCon(con);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				
+			}			
+				
+			return order_id;
+		
 		}
 
 }

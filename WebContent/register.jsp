@@ -16,7 +16,6 @@
 <script src="resource/jquery-validation-1.17.0/lib/jquery.js"></script>
 <script src="resource/jquery-validation-1.17.0/dist/jquery.validate.js"></script>
 <script src="resource/jquery-validation-1.17.0/dist/localization/messages_zh.js"></script>
-
 <style>
 .error{
 	color:red;
@@ -48,36 +47,36 @@
 										</h4>
 
 										<div class="space-6"></div>
-										<form id="commentForm" action="LoginServlet?flag=register" method="post" onsubmit="return check()">
+										<form id="commentForm" action="RegisterServlet" method="post" onsubmit="return check()">
 											<fieldset>
-												<label class="block clearfix"> <span
+												昵称：<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userId"
 														required name="userName"  type="text" class="form-control"
 														placeholder="请输入您真实姓名" /> <i class="icon-user"></i>
 												</span>
-												</label> <label class="block clearfix"> <span
+												</label> 密码：<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userPw"
 														required name="password" type="password" class="form-control"
 														placeholder="请输入您的密码" /> <i class="icon-lock"></i>
 												</span>
 												</label>
-												<label class="block clearfix"> <span
-													class="block input-icon input-icon-right"> <input id="userNumber"
+												邮箱：<label class="block clearfix"> <span
+													class="block input-icon input-icon-right"> <input id="userEmail"
 														required name="userEmail"  type="text" class="form-control"
 														placeholder="请输入您的邮箱" /> <i class="icon-user"></i>
-												</span>
+												</span><font color="red">${requestScope.emailMess}</font>
 												</label>
-												<label class="block clearfix"> <span
+												地址：<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userAge"
 														required name="address"  type="text" class="form-control"
 														placeholder="请输入您的地址" /> <i class="icon-user"></i>
 												</span>
 												</label>
-												<label class="block clearfix"> <span
+												电话：<label class="block clearfix"> <span
 													class="block input-icon input-icon-right"> <input id="userSex"
 														required name="userTel"  type="text" class="form-control"
 														placeholder="请输入您的电话" /> <i class="icon-user"></i>
-												</span>
+												</span><font color="red">${telMess}</font>
 												</label>
 												
 												<div class="clearfix">

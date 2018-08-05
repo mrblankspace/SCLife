@@ -62,10 +62,10 @@ public class OrderServlet extends HttpServlet {
 			httpSession = request.getSession();//获取session内容，session内是user实例
 			User user = (User) httpSession.getAttribute("user");//获取接单人实例
 			//int id=user.getId();//获取接收者id
-			int order_id=Integer.parseInt(request.getParameter("order_id"));//获取订单id
+			String order_id=request.getParameter("order_id");//获取订单id
 			OrderService os=new OrderServiceImpl();
 			Order tempOrder=os.GetOrderById(order_id);//获得id对应的订单,此订单有所有信息，除了接单人，完成时间，
-			if(tempOrder.getOrder_id()==0)
+			if(tempOrder.getOrder_id()==null)
 			{
 				//未找到单，跳转到其他页面
 				System.out.println("not found this order!");
@@ -135,7 +135,7 @@ public class OrderServlet extends HttpServlet {
 			request.getRequestDispatcher("jsp/user/userinfo_show.jsp").forward(request, response);
 		}else if("deleteOrder".equals(request.getParameter("flag")))
 		{
-			int order_id=Integer.parseInt(request.getParameter("order_id"));
+			String order_id=request.getParameter("order_id");
 			OrderService os=new OrderServiceImpl();
 			Order order=os.GetOrderById(order_id);//获得id对应的订单,此订单有所有信息，除了接单人，完成时间，
 			int row=orderService.DeleteOrder(order);
@@ -143,6 +143,33 @@ public class OrderServlet extends HttpServlet {
 			{
 				System.out.println("delete success");
 				request.getRequestDispatcher("OrderServlet?flag=findOrder_index").forward(request, response);
+			}
+		}else if("updateOrder_Status1".equals(request.getParameter("flag")))
+		{
+			String order_id=request.getParameter("order_id");
+			Order or=orderService.GetOrderById(order_id);
+			if(or.getAccept_person()==null)
+			{
+				User accepter=new User();
+				accepter.setId(0);
+				or.setAccept_person(accepter);
+			or.setOrder_status("已取消");
+			
+			orderService.UpdateOrder(or);
+			request.getRequestDispatcher("OrderServlet?flag=findOrderByUser").forward(request, response);
+			}
+		}else if("updateOrder_Status2".equals(request.getParameter("flag")))
+		{
+			String order_id=request.getParameter("order_id");
+			Order or=orderService.GetOrderById(order_id);
+			if(or.getAccept_person()==null)
+			{
+				User accepter=new User();
+				accepter.setId(0);
+				or.setAccept_person(accepter);
+			or.setOrder_status("已收货");			
+			orderService.UpdateOrder(or);
+			request.getRequestDispatcher("OrderServlet?flag=findOrderByUser").forward(request, response);
 			}
 		}
 	}

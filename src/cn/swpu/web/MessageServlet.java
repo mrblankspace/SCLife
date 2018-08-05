@@ -33,14 +33,23 @@ public class MessageServlet extends HttpServlet {
 		HttpSession httpSession = request.getSession();
 		User user = (User)httpSession.getAttribute("user");
 		String flag = request.getParameter("flag");
-		if("queryMessage".equals(flag)){                //ajax请求
+		//查询用户的未读消息
+	
+		if("queryMessage".equals(flag)&&user!=null){                //ajax请求
 			List<Message> messagesList = messageService.queryMessageByUserId(user.getId());
 			JsonConfig jsonConfig = new JsonConfig();
 			JSONArray jsonArray = JSONArray.fromObject(messagesList,jsonConfig);
 			response.getWriter().println(jsonArray.toString());
-		}else if("readMessage".equals(flag)){
+		}else if("readMessage".equals(flag)){    //更新消息的状态
 			int messageId = Integer.parseInt(request.getParameter("messageId"));
 			messageService.readMessage(messageId);
+		}else if ("findDialogMessage".equals(flag)) {
+			int user_id = Integer.parseInt(request.getParameter("user_id"));
+			int other_person_id = Integer.parseInt(request.getParameter("other_person_id"));
+			List<Message> messageList = messageService.findDialogMessage(user_id,other_person_id);
+			JsonConfig jsonConfig = new JsonConfig();
+			JSONArray jsonArray = JSONArray.fromObject(messageList,jsonConfig);
+			response.getWriter().println(jsonArray.toString());
 		}
 	}
        

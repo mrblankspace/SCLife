@@ -15,8 +15,11 @@
 <link rel="stylesheet" href="resource/assets/css/ace-skins.min.css" />
 <script src="resource/assets/js/ace-extra.min.js"></script>
 <script src="resource/assets/js/jquery-2.1.4.min.js"></script>
+<script src="resource/js/dateformat.js"></script>
 <script>
-	
+	var global_from_person_id;
+	var user_id = ${user.id};
+	var webSocket;
 	//获取消息
 	function getMessage(){
 		$.post("${pageContext.request.contextPath }/MessageServlet?flag=queryMessage",function(data){
@@ -25,7 +28,7 @@
 			$("#showMessage1").text(length+"条未读消息");
 			$("#messageList").empty();
 			$(data).each(function(i,n){	
-			$("#messageList").append('<li><a href="javascript:void(0)" onclick="test(this)" class="clearfix">'+
+			$("#messageList").append('<li><a href="javascript:void(0)" onclick="test(this,'+n.from_person.id+')" class="clearfix">'+
 					'<input type="hidden" name="message_id" value="'+n.id+'"><img src="resource/assets/images/avatars/avatar.png" class="msg-photo" alt="'+n.to_person.username+'" />'+
 					'<span class="msg-body">'+
 					'<span class="msg-title">'+
@@ -36,32 +39,139 @@
 		});
 	},"json");	
 	}
-	//阅读消息
+	//阅读消息 同时建立websocket链接    单人聊天框关闭事件触发  关闭websocket连接
 	function readMessage(messageId){
 		//var a = $("#messageList > input:hidden").val();
-		window.alert(messageId);
-		$.post("${pageContext.request.contextPath }/MessageServlet?flag=readMessage",{"messageId":messageId},function(){
-			window.alert("messageId"+messageId);
+		//window.alert(messageId);
+		$.post("${pageContext.request.contextPath }/MessageServlet?flag=readMessage",{"messageId":messageId},function(data){
+			window.alert("messageId"+messageId);//为啥子回调没成功
 		},"json");
 	}
+	
 	//点击特定消息后触发
-	function test(atag){
+	function test(atag,userId){
+		global_from_person_id = userId;
 		$("#messageBox").modal("show");
-	//	window.alert($(atag).children("input").val());
 		readMessage($(atag).children("input").val());
 	}
 	
 	$(function(){
-		 window.setInterval("getMessage()",1000);
+		//ajax轮询    未读消息
+		 window.setInterval("getMessage()",10000);
 	})
 	
+	
 	$(document).ready(function(){
-		$("#messageList").on("shown.bs.modal",function(){
+		//注册模态框事件
+		$("#messageBox").on("show.bs.modal",function(){
+			var url = 'ws://'+window.location.host+'websocket/chat';
+			webSocket = new WebSocket("ws://localhost:8080/SCLife/websocket/chat");   //打开聊天框后建立websocket连接
+			//webSocket.send("helloworld");   
+			//为发送按钮注册一个点击事件
+			//var json = {"from_person_id":"3","to_person_id":"1","content":"小伙子很帅"};
+			//var data=JSON.stringify(json);
+			//webSocket.send(data);
 			
+			//回显最新的	10条数据
+			/*$.post("${pageContext.request.contextPath }/MessageServlet?flag=findDialogMessage",{"user_id":user_id,"other_person_id":global_from_person_id},function(data){
+				$(data).each(function(i,n){
+					var username = n.from_person.username;
+		        	var content = n.content;
+		        	//收到消息后渲染到聊天窗
+		        	var dislogBody='<div class="itemdiv dialogdiv">'+
+		          		  '<div class="user">'+
+		       			  '<img alt="" src="resource/assets/images/avatars/avatar1.png" />'+
+		       			  '<a href="#">'+username+'</a>'+
+		     			  '</div>'+
+		    			  '<div class="body">'+
+		       			  '<div class="time">'+
+		     		      '<i class="ace-icon fa fa-clock-o"></i>'+
+		          		  '<span class="green">'+dateFtt("yyyy-MM-dd hh:mm:ss",new Date())+'</span>'+
+		       			  '</div>'+
+		     			  '<div class="name">'+
+		      			  '</div>'+
+		   		  	      '<div class="text">'+content+'</div>'+
+		   				  '</div>';
+		        	$(".dialogs").append(dislogBody);
+				});
+			},"json");*/
+			
+	        webSocket.onmessage=function(e){
+	        	console.log('receive message',e.data);
+	        	var data = JSON.parse(e.data);
+	        	var username = data.from_person.username;
+	        	var content = data.content;
+	        	//收到消息后渲染到聊天窗
+	        	var dislogBody='<div class="itemdiv dialogdiv">'+
+	          		  '<div class="user">'+
+	       			  '<img alt="" src="resource/assets/images/avatars/avatar1.png" />'+
+	       			  '<a href="#">'+username+'</a>'+
+	     			  '</div>'+
+	    			  '<div class="body">'+
+	       			  '<div class="time">'+
+	     		      '<i class="ace-icon fa fa-clock-o"></i>'+
+	          		  '<span class="green">'+dateFtt("yyyy-MM-dd hh:mm:ss",new Date())+'</span>'+
+	       			  '</div>'+
+	     			  '<div class="name">'+
+	      			  '</div>'+
+	   		  	      '<div class="text">'+content+'</div>'+
+	   				  '</div>';
+	        	$(".dialogs").append(dislogBody);
+	        }
+	        
+	        webSocket.onclose = function(){
+				console.log('webSocket closed');
+			}
+	        webSocket.onopen = function(){
+	        	console.log('webSocket is opening');
+	        }
 		});
-		$("#messageList").on("hidden.bs.modal",function(){
-			//window.alert(1111111);
+		$("#messageBox").on("hidden.bs.modal",function(){
+			webSocket.close();
+			$(".dialogs").empty();
 		});
+		 //当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+		//window.onbeforeunload = function(){webSocket.close();}  //刷新好像也能触发
+		//聊天框发送事件
+		$("#submitBt").on("click",function(){
+			//如何取   现在session里有  js代码与jsp过于耦合了  能不能不要在js代码里出现el表达式
+			var from_person_id = user_id;
+			var to_person_id = global_from_person_id;
+			var content = $("#messageInput").val();
+		    //window.alert(from_person_id+"to_person_id"+to_person_id+"content"+content);
+			if(content!=""){
+				//把消息渲染在自己的聊天框内 
+				//window.alert("laile");
+				//$(".dialogs").append('<div class="itemdiv dialogdiv"><div class="user"> <img alt="Alexas Avatar" src="resource/assets/images/avatars/avatar1.png"><div class="user"></div>');
+				//$(".cloneable").clone().prependTo(".dialogs");
+				//唉还是拼接吧
+				var dislogBody='<div class="itemdiv dialogdiv">'+
+                '<div class="user">'+
+                '<img alt="" src="resource/assets/images/avatars/avatar1.png" />'+
+                ' <a href="#">me:</a>'+
+                '</div>'+
+                '<div class="body">'+
+                '<div class="time">'+
+                '<i class="ace-icon fa fa-clock-o"></i>'+
+                '<span class="green">'+dateFtt("yyyy-MM-dd hh:mm:ss",new Date())+'</span>'+
+                '</div>'+
+                '<div class="name">'+
+                '</div>'+
+                '<div class="text">'+content+'</div>'+
+                '</div>'
+                //消息渲染到聊天框
+				$(".dialogs").append(dislogBody);
+                var json = {"from_person_id":from_person_id,"to_person_id":to_person_id,"content":content};
+                var data=JSON.stringify(json);
+                //发送websocket消息 //把消息发送给聊天对象
+                webSocket.send(data);
+			}else{
+				window.alert("消息不能为空哦");
+			}
+			$("#messageInput").val("");
+		});
+		
+		
 });
 </script>
 </head>
@@ -139,7 +249,7 @@
                                          
               <li class="divider"></li>
 
-              <li><a href="login.jsp"> <i
+              <li><a href="LogoutServlet"> <i
                   class="ace-icon fa fa-power-off"></i> 退出
               </a></li>
             </ul></li>
@@ -191,7 +301,7 @@
          
 			<li> <a href="OrderServlet?flag=findOrder_waimai" target="mainframe"
             > <i class="menu-icon fa fa-desktop"></i> <span
-              class="menu-text"> 快递 外卖</span> <b
+              class="menu-text"> 快递外卖</span> <b
               class="arrow fa fa-angle-down"></b>
           </a></li>
           <li><a href="OrderServlet?flag=findOrder_waibao" target="mainframe"
@@ -245,16 +355,7 @@
 							var height = jQuery(window).height() - 50;
 							jQuery("#mainframe").attr("height",
 									"" + height + "px;");
-						
-							
-						    $('#messageBox').on('shown.bs.modal', function (e) {
-				                // 关键代码，如没将modal设置为 block，则$modala_dialog.height() 为零
-				                $(this).css('display', 'block');
-				                var modalHeight=$(window).height() / 2 - $('#messageBox.modal-dialog').height() / 2;
-				                $(this).find('.modal-dialog').css({
-				                    'margin-top': modalHeight
-				                });
-				            });		 
+	 
 	 </script>
 
 
@@ -266,177 +367,49 @@
   <!-- /.main-container -->
   <!-- basic scripts -->
   
-   <div class="col-sm-6 col-sm-offset-3 modal fade"  role="dialog" id="messageBox" aria-hidden="true" align="center">
-                 <div class="widget-box">
-                      <div class="widget-header">
-                        <h4 class="widget-title lighter smaller">
+  <div class="col-sm-6 col-sm-offset-3 modal fade"  role="dialog" id="messageBox" aria-hidden="true" align="center" style="position: fixed;margin-top: 5% ;padding-left: 17px;">
+       <div class="widget-box">
+            <div class="widget-header">
+                 <h4 class="widget-title lighter smaller">
                           <i class="ace-icon fa fa-comment blue"></i>
                           Conversation
                         </h4>
-                      </div>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                          <div class="dialogs" style="height: 400px">
 
-                      <div class="widget-body">
-                        <div class="widget-main no-padding">
-                          <div class="dialogs">
-                            <div class="itemdiv dialogdiv">
-                              <div class="user">
-                                <img alt="Alexa's Avatar" src="resource/assets/images/avatars/avatar1.png" />
-                              </div>
-
-                              <div class="body">
-                                <div class="time">
-                                  <i class="ace-icon fa fa-clock-o"></i>
-                                  <span class="green">4 sec</span>
-                                </div>
-
-                                <div class="name">
-                                  <a href="#">Alexa</a>
-                                </div>
-                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
-
-                                <div class="tools">
-                                  <a href="#" class="btn btn-minier btn-info">
-                                    <i class="icon-only ace-icon fa fa-share"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                              <div class="user">
-                                <img alt="John's Avatar" src="resource/assets/images/avatars/avatar.png" />
-                              </div>
-
-                              <div class="body">
-                                <div class="time">
-                                  <i class="ace-icon fa fa-clock-o"></i>
-                                  <span class="blue">38 sec</span>
-                                </div>
-
-                                <div class="name">
-                                  <a href="#">John</a>
-                                </div>
-                                <div class="text">Raw denim you probably haven&#39;t heard of them jean shorts Austin.</div>
-
-                                <div class="tools">
-                                  <a href="#" class="btn btn-minier btn-info">
-                                    <i class="icon-only ace-icon fa fa-share"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                              <div class="user">
-                                <img alt="Bob's Avatar" src="resource/assets/images/avatars/user.jpg" />
-                              </div>
-
-                              <div class="body">
-                                <div class="time">
-                                  <i class="ace-icon fa fa-clock-o"></i>
-                                  <span class="orange">2 min</span>
-                                </div>
-
-                                <div class="name">
-                                  <a href="#">Bob</a>
-                                  <span class="label label-info arrowed arrowed-in-right">admin</span>
-                                </div>
-                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque commodo massa sed ipsum porttitor facilisis.</div>
-
-                                <div class="tools">
-                                  <a href="#" class="btn btn-minier btn-info">
-                                    <i class="icon-only ace-icon fa fa-share"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                              <div class="user">
-                                <img alt="Jim's Avatar" src="resource/assets/images/avatars/avatar4.png" />
-                              </div>
-
-                              <div class="body">
-                                <div class="time">
-                                  <i class="ace-icon fa fa-clock-o"></i>
-                                  <span class="grey">3 min</span>
-                                </div>
-
-                                <div class="name">
-                                  <a href="#">Jim</a>
-                                </div>
-                                <div class="text">Raw denim you probably haven&#39;t heard of them jean shorts Austin.</div>
-
-                                <div class="tools">
-                                  <a href="#" class="btn btn-minier btn-info">
-                                    <i class="icon-only ace-icon fa fa-share"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                              <div class="user">
-                                <img alt="Alexa's Avatar" src="resource/assets/images/avatars/avatar1.png" />
-                              </div>
-
-                              <div class="body">
-                                <div class="time">
-                                  <i class="ace-icon fa fa-clock-o"></i>
-                                  <span class="green">4 min</span>
-                                </div>
-
-                                <div class="name">
-                                  <a href="#">Alexa</a>
-                                </div>
-                                <div class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
-
-                                <div class="tools">
-                                  <a href="#" class="btn btn-minier btn-info">
-                                    <i class="icon-only ace-icon fa fa-share"></i>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
                           </div>
 
                           <form>
                             <div class="form-actions">
                               <div class="input-group">
-                                <input placeholder="Type your message here ..." type="text" class="form-control" name="message" />
+                                <input id="messageInput" placeholder="Type your message here ..." type="text" class="form-control" name="message" />
                                 <span class="input-group-btn">
-                                  <button class="btn btn-sm btn-info no-radius" type="button">
-                                    <i class="ace-icon fa fa-share"></i>
-                                    Send
+                                  <button id="submitBt" class="btn btn-sm btn-info no-radius" type="button">
+                                      <i class="ace-icon fa fa-share"></i>
+                                      Send
                                   </button>
                                 </span>
                               </div>
                             </div>
                           </form>
                         </div><!-- /.widget-main -->
-                      </div><!-- /.widget-body -->
-                    </div><!-- /.widget-box -->
-                  </div>
+            </div><!-- /.widget-body -->
+       </div><!-- /.widget-box -->
+  </div>
 
 
-  <script type="text/javascript">
+<script type="text/javascript">
 			if ("ontouchend" in document)
 				document
 						.write("<script src='resource/assets/js/jquery.mobile.custom.min.js'>"
 								+ "<"+"script>");
 		</script>
-
-
-
-
 <script src="resource/assets/js/bootstrap.min.js"></script>
 <script src="resource/assets/js/typeahead-bs2.min.js"></script>
-  <!-- ace scripts -->
-
-  <script src="resource/assets/js/ace-elements.min.js"></script>
-  <script src="resource/assets/js/ace.min.js"></script>
-
-
+<script src="resource/assets/js/ace-elements.min.js"></script>
+<script src="resource/assets/js/ace.min.js"></script>
 </body>
 </html>
 

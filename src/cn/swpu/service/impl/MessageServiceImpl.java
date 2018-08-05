@@ -31,5 +31,11 @@ public class MessageServiceImpl implements MessageService{
 		// TODO Auto-generated method stub
 		messageDao.readMessage(messageId);
 	}
+
+	@Override
+	public List<Message> findDialogMessage(int user_id, int other_person_id) {
+		// TODO Auto-generated method stub
+		return messageDao.findDialogMessage(user_id,other_person_id);
+	}
 	
 }

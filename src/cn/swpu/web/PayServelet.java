@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -18,13 +19,14 @@ import cn.swpu.dao.impl.OrderDaoImpl;
 import cn.swpu.entity.Order;
 import cn.swpu.entity.User;
 import cn.swpu.util.MD5Util;
+import cn.swpu.service.impl.*;  
 import sun.awt.Symbol;
 
 
 @WebServlet(description = "支付", urlPatterns = { "/PayServelet" })
 public class PayServelet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+    OrderServiceImpl oServiceImpl=new OrderServiceImpl();
    
     public PayServelet() {
         super();
@@ -38,13 +40,15 @@ public class PayServelet extends HttpServlet {
 			HttpSession session=request.getSession();
 			//生成订单信息
 			Order or=new Order();//订单对象
+			String order_id=oServiceImpl.AutogetOrder_id();	//订单id
+			or.setOrder_id(order_id);
 			char type=request.getParameter("ordertype").charAt(0);//获取订单的类型
 			String ordertype=type(type);//订单实际类型
 			or.setCatagory(ordertype);
 			String describe=request.getParameter("textarea");
-			or.setDescribe(describe);
+			or.setDescribe(describe);//订单内容
 			User usr=(User) session.getAttribute("user");
-			or.setSend_person(usr);
+			or.setSend_person(usr);//发起订单的人
 			Date date =new Date();
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String format = simpleDateFormat.format(date);
@@ -54,20 +58,16 @@ public class PayServelet extends HttpServlet {
 			or.setOrder_money(price);		
 			session.setAttribute("order", or);
 			OrderDaoImpl odimpl=new   OrderDaoImpl(); 
-			odimpl.addOrder(or);
+			System.out.println(odimpl.addOrder(or));
 			
 			//生成支付信息
 			String uid="e060d5b0a8347544149bd9f2";//商户唯一id:
-			String token="7fc340b48559bb218779b5bf9b971e1c";//商户token
+			String token="1155e116c6f542aeca5337d12e09cdf4";//商户token
 			int istype=Integer.parseInt(request.getParameter("payway").toString());
-						//String path = request.getContextPath();
-		  //  String basePath = request.getScheme() + "://"
-		    //    + request.getServerName() + ":" + request.getServerPort()
-		    //    + path + "/";
 			String notify_url="http://zb.mrblankspace.cn/PayServlet";//返回post路径		     
 			String return_url="http://www.baidu.com";//跳转路径
-			String orderid="123456";//订单id
-			String orderuid="123456";//订购者id
+			String orderid=order_id;
+			String orderuid="usr.getId()";//订购者id
 			String goodsname="押金";
 			String key=MD5Util.encodePassword(goodsname + istype + notify_url + orderid + orderuid + price + return_url + token + uid);//密匙         		
 			Cookie cok=new Cookie("order",uid+"#"+istype+"#");
@@ -77,7 +77,7 @@ public class PayServelet extends HttpServlet {
 			request.setAttribute("notify_url",notify_url);
 			request.setAttribute("return_url",return_url);
 			request.setAttribute("orderid",orderid);
-			request.setAttribute("orderuid",orderid);
+			request.setAttribute("orderuid",orderuid);
 		    request.setAttribute("goodsname",goodsname);
 		    request.setAttribute("key",key);
 		    request.getRequestDispatcher("jsp/order/pay.jsp")

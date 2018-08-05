@@ -111,6 +111,9 @@
         <d:column property="order_status" title="订单状态"></d:column>
         <d:column property="order_date" title="发布时间"></d:column>  
         <d:column property="finish_date" title="完成时间"></d:column>    
+         <d:column href="OrderServlet?flag=updateOrder_Status1" paramId="order_id" paramProperty="order_id" title="取消订单" value="取消订单"  ></d:column>   
+        <d:column href="OrderServlet?flag=updateOrder_Status2" paramId="order_id" paramProperty="order_id" title="确认收货" value="确认收货"  ></d:column>   
+        
       </d:table>
 		</div>
 </div>

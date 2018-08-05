@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 	{
 		return od.updateOrder(order);
 	}
-	public Order GetOrderById(int id)
+	public Order GetOrderById(String id)
 	{
 		return od.getOrderById(id);
 	}
@@ -89,4 +89,10 @@ public class OrderServiceImpl implements OrderService {
 		// TODO Auto-generated method stub
 		return od.showMyAcpOrder(user);
 	}
+	
+	public String AutogetOrder_id() 
+	{
+		return od.AutogetOrder_id();
+	}
+	
 }

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+
+<%@ page import="java.util.Date"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,30 +37,43 @@
 										</h4>
 
 										<div class="space-6"></div>
-										<form action="LoginServlet?flag=login" method="post" onsubmit="">
+										<form action="LoginServlet?flag=login" method="post"
+											onsubmit="return check()">
 											<fieldset>
-												<label class="block clearfix"> <span
-													class="block input-icon input-icon-right"> <input id="userId"
-														name="userEmail" value="" type="text" class="form-control"
-														placeholder="请输入您的邮箱" /> <i class="icon-user"></i>
+												邮箱：<label class="block clearfix"> <span
+													class="block input-icon input-icon-right"> <input
+														id="userId" name="userEmail" value="" type="text"
+														class="form-control" placeholder="请输入您的邮箱" /> <i
+														class="icon-user"></i>
 												</span>
-												</label> <label class="block clearfix"> <span
-													class="block input-icon input-icon-right"> <input id="userPw"
-														name="password" value="" type="password" class="form-control"
-														placeholder="请输入您的密码" /> <i class="icon-lock"></i>
+												</label> 密码：<label class="block clearfix"> <span
+													class="block input-icon input-icon-right"> <input
+														id="userPw" name="password" value="" type="password"
+														class="form-control" placeholder="请输入您的密码" /> <i
+														class="icon-lock"></i>
 												</span>
-												</label>
+												</label>  <br>验证码：<input type="text" name="image"> <img
+													src="VerifyCodeServlet"> <br>
+											<a href="LoginServlet?flag=login"
+													> <i
+														class="ace-icon fa fa-power-off"></i> 看不清？换一张！
+												</a> <font color="red">${imageMess}</font> <br>
+												<br> <br>
+
+
+
 
 												<div class="clearfix">
-											
 
-													<a href="register.jsp" class="width-35 pull-left btn btn-sm btn-primary">注册</a>
-													<button type="submit" 
+
+													<a href="register.jsp"
+														class="width-35 pull-left btn btn-sm btn-primary">注册</a>
+													<button type="submit"
 														class="width-35 pull-right btn btn-sm btn-primary">
 														<i class="icon-key"></i> 登陆
 													</button>
-													
-													
+
+
 												</div>
 
 												<div class="space-4"></div>
@@ -72,14 +87,14 @@
 							</div>
 
 
+						</div>
+
 					</div>
-
 				</div>
+
 			</div>
-
 		</div>
-</div>
 	</div>
-
+	
 </body>
 </html>

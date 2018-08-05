@@ -9,4 +9,5 @@ public interface MessageDao {
 	public void deleteMessage(Message message);
 	public List<Message> queryMessageByUserId(int id);
 	public void readMessage(int messageId);
+	public List<Message> findDialogMessage(int user_id, int other_person_id);
 }
