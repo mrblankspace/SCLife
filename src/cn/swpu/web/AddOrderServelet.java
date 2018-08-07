@@ -26,7 +26,8 @@ public class AddOrderServelet extends HttpServlet {
         super();
         
     }
-       protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException ,IOException {
+    
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException ,IOException {
 		request.setCharacterEncoding("UTF-8");			
 		Order or=(Order)request.getSession().getAttribute("order");
 		String order_id=or.getOrder_id();
@@ -36,7 +37,7 @@ public class AddOrderServelet extends HttpServlet {
 		System.out.println(order_id);
 		OrderDaoImpl odimpl=new   OrderDaoImpl(); 
 		odimpl.addOrder(or);
-		response.sendRedirect("http://zb.mrblankspace.cn/SCLife");	
+		response.sendRedirect("jsp/order/orderinfo_list.jsp");	
 	}
 
 }

@@ -167,11 +167,11 @@ public class OrderDaoImpl implements OrderDao {
 		
 		try {
 			Connection con=du.getCon();
-			String sql="delete from order where id=?";//通过传入用户的id删除
+			String sql="delete from SCLife.order where order_id=?";//通过传入用户的id删除
 			pstmt=con.prepareStatement(sql);
 			pstmt.setString(1,order.getOrder_id());
 			
-			row=pstmt.executeUpdate();//接受返回受影响条数
+			row = pstmt.executeUpdate();//接受返回受影响条数
 			
 			du.closeCon(con);
 		} catch (ClassNotFoundException e) {

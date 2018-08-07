@@ -33,28 +33,13 @@
   	// var webSocket;
 </script>
 <body>
-	<div style="margin: 10px;">
+	<div style="">
 		<ul class="breadcrumb" style="margin: 0px;">
 			<li>首页</li>
 			<li>接单</li>
 		</ul>
 	</div>
-	<form action="OrderServlet?flag=query" method="post" class="form-inline">
-		<div class="row alert alert-info" style="margin: 10px; padding: 5px; text-align: center;">
-			<div class="form-group">
-				<label>条件:</label> 
-				<select name="condition" class="form-control">
-					<option value="ordertype">订单类型</option>
-					<option value="orderstatus">订单状态</option>
-					<option value="ordertime">发布时间</option>
-					<option value="orderreward">最低报酬</option>
-				</select>
-				<input type="text" name="content" value="" class="form-control" placeholder="请输入查询条件" />
-			</div>
-			<input type="submit" class="btn btn-danger" value="查询"> 		
-		</div>
-		
-	</form>
+
    
  <!-- js 方式渲染表格 -->
  <div class="container-fluid" style="padding: 5px; margin: 5px">
@@ -145,10 +130,13 @@ function initTable(){
 $("#table").bootstrapTable({ // 对应table标签的id
 	  method : 'get',
       url: "<%=request.getContextPath()%>/OrderServlet?flag=findOrder_other", 
-      cache: true, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
-      contentType : "application/json", 
       dataType : 'json',
+      //toolbar: '#toolbar',
+      showRefresh: true,
+      search: true,
       striped: true,  //表格显示条纹，默认为false
+      showToggle: true,
+      showColumns: true,
       pagination: true, // 在表格底部显示分页组件，默认false
       pageList: [10, 20], // 设置页面可以显示的数据条数
       pageSize: 10, // 页面数据条数

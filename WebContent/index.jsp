@@ -231,7 +231,7 @@
 		<div class="navbar-header pull-left">
         <a href="index.jsp" class="navbar-brand"> 
 			<small>
-            <i class="fa fa-leaf"></i> 校园生活系统
+            <i class="fa fa-leaf"></i> 校园微生活
         </small>
         </a>
       </div>

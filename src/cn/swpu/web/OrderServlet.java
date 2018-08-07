@@ -152,7 +152,7 @@ public class OrderServlet extends HttpServlet {
 			int row = orderService.DeleteOrder(order);
 			if (row != 0) {
 				System.out.println("delete success");
-				request.getRequestDispatcher("OrderServlet?flag=findOrder_index").forward(request, response);
+				request.getRequestDispatcher("jsp/order/orderinfo_list.jsp").forward(request, response);
 			}
 		} else if ("updateOrder_Status1".equals(request.getParameter("flag"))) {
 			String order_id = request.getParameter("order_id");
