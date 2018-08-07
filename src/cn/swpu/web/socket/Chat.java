@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,7 +29,7 @@ import net.sf.json.JSONObject;
 public class Chat {
 	UserService userService = new UserServiceImpl();
 	MessageService messageService = new MessageServiceImpl();
-	private static final HashMap<Integer, Chat> webSocketConnect  = new HashMap<>();
+	private static final ConcurrentHashMap<Integer, Chat> webSocketConnect  = new ConcurrentHashMap<>();
 	private HttpSession httpSession;
 	private Session session;
 	/**

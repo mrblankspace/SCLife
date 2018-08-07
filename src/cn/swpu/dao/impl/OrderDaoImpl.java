@@ -41,8 +41,8 @@ public class OrderDaoImpl implements OrderDao {
 					User sender = userDao.findById(rs.getInt("send_id"));
 					order.setSend_person(sender);
 					if (rs.getInt("accept_id")!=0) {
-						User accepter = userDao.findById(rs.getInt("send_id"));
-						order.setSend_person(accepter);
+						User accepter = userDao.findById(rs.getInt("accept_id"));
+						order.setAccept_person(accepter);
 					}
 					order.setCatagory(rs.getString("catagory"));
 					order.setDescribe(rs.getString("order_describe"));
@@ -85,7 +85,7 @@ public class OrderDaoImpl implements OrderDao {
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
-					User accepter = userDao.findById(rs.getInt("send_id"));
+					User accepter = userDao.findById(rs.getInt("accept_id"));
 					order.setSend_person(accepter);
 				}
 				order.setCatagory(rs.getString("catagory"));
@@ -264,7 +264,7 @@ public class OrderDaoImpl implements OrderDao {
 				User sender = userDao.findById(rs.getInt("send_id"));
 				tempOrder.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
-					User accepter = userDao.findById(rs.getInt("send_id"));
+					User accepter = userDao.findById(rs.getInt("accept_id"));
 					tempOrder.setSend_person(accepter);
 				}
 				tempOrder.setCatagory(rs.getString("catagory"));
@@ -318,7 +318,46 @@ public class OrderDaoImpl implements OrderDao {
 		
 		return row;
 	}
+	
+	public int updateStatus(Order order)
+	{
+		DbUtil du=new DbUtil();
+		PreparedStatement pstmt=null;
+		int row=0;
+		try {
+			Connection con=du.getCon();
+			String sql="update `order` set catagory=?,order_describe=?,order_money=?,send_id=?,order_date=?,accept_id=?,order_status=?,finish_date=? where order_id=?";
+			pstmt=con.prepareStatement(sql);
+			pstmt.setString(1, order.getCatagory());
+			pstmt.setString(2, order.getDescribe());
+			pstmt.setFloat(3, order.getOrder_money());
+			int send_id=order.getSend_person().getId();//获取发单人的id
+			pstmt.setInt(4, send_id);
+			pstmt.setString(5, order.getOrder_date());
+			int accept_id=order.getAccept_person().getId();//获取接单人的id
+			pstmt.setInt(6, accept_id);
+			pstmt.setString(7, order.getOrder_status());
+			pstmt.setString(8, order.getFinish_date());
+			pstmt.setString(9, order.getOrder_id());
+			
+			row=pstmt.executeUpdate();
+			
+			du.closeCon(con);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
 
+	
 	@Override
 	public List<Order> findWaimaiOrder() {
 		// TODO Auto-generated method stub
@@ -354,7 +393,7 @@ public class OrderDaoImpl implements OrderDao {
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
-					User accepter = userDao.findById(rs.getInt("send_id"));
+					User accepter = userDao.findById(rs.getInt("accept_id"));
 					order.setSend_person(accepter);
 				}
 				order.setCatagory(rs.getString("catagory"));
@@ -414,7 +453,7 @@ public class OrderDaoImpl implements OrderDao {
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
-					User accepter = userDao.findById(rs.getInt("send_id"));
+					User accepter = userDao.findById(rs.getInt("accept_id"));
 					order.setSend_person(accepter);
 				}
 				order.setCatagory(rs.getString("catagory"));
@@ -485,8 +524,8 @@ public class OrderDaoImpl implements OrderDao {
 				User sender = userDao.findById(rs.getInt("send_id"));
 				order.setSend_person(sender);
 				if (rs.getInt("accept_id")!=0) {
-					User accepter = userDao.findById(rs.getInt("send_id"));
-					order.setSend_person(accepter);
+					User accepter = userDao.findById(rs.getInt("accept_id"));
+					order.setAccept_person(accepter);
 				}
 				order.setCatagory(rs.getString("catagory"));
 				order.setDescribe(rs.getString("order_describe"));
@@ -539,8 +578,8 @@ public class OrderDaoImpl implements OrderDao {
 					User sender = userDao.findById(rs.getInt("send_id"));
 					order.setSend_person(sender);
 					if (rs.getInt("accept_id")!=0) {
-						User accepter = userDao.findById(rs.getInt("send_id"));
-						order.setSend_person(accepter);
+						User accepter = userDao.findById(rs.getInt("accept_id"));
+						order.setAccept_person(accepter);
 					}
 					order.setCatagory(rs.getString("catagory"));
 					order.setDescribe(rs.getString("order_describe"));
@@ -589,8 +628,8 @@ public class OrderDaoImpl implements OrderDao {
 					User sender = userDao.findById(rs.getInt("send_id"));
 					order.setSend_person(sender);
 					if (rs.getInt("accept_id")!=0) {
-						User accepter = userDao.findById(rs.getInt("send_id"));
-						order.setSend_person(accepter);
+						User accepter = userDao.findById(rs.getInt("accept_id"));
+						order.setAccept_person(accepter);
 					}
 					order.setCatagory(rs.getString("catagory"));
 					order.setDescribe(rs.getString("order_describe"));

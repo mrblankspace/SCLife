@@ -17,6 +17,10 @@ public class OrderServiceImpl implements OrderService {
 	{
 		return od.showOrder();
 	}
+	public int UpdateStatus(Order order)
+	{
+		return od.updateStatus(order);
+	}
 	public int AddOrder(Order order)
 	{
 		return od.addOrder(order);

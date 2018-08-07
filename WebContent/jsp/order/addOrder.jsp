@@ -16,16 +16,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>我要发单</title>
-<link href="../resource/css/bootstrap.min.css" rel="stylesheet" />
-<script type="text/javascript" src="../resource/js/jquery.min.js"></script>
-<script type="text/javascript" src="../resource/js/bootstrap.min.js"></script>
+<link href="resource/css/bootstrap.min.css" rel="stylesheet" />
+<script type="text/javascript" src="resource/js/jquery.min.js"></script>
+<script type="text/javascript" src="resource/js/bootstrap.min.js"></script>
 
 <!-- 输入过滤 -->
-<script src="../resource/jquery-validation-1.17.0/lib/jquery.js"></script>
+<script src="resource/jquery-validation-1.17.0/lib/jquery.js"></script>
 <script
-  src="../resource/jquery-validation-1.17.0/dist/jquery.validate.js"></script>
+  src="resource/jquery-validation-1.17.0/dist/jquery.validate.js"></script>
 <script
-  src="../resource/jquery-validation-1.17.0/dist/localization/messages_zh.js"></script>
+  src="resource/jquery-validation-1.17.0/dist/localization/messages_zh.js"></script>
 
 <style>
 .error {
@@ -36,18 +36,18 @@
 </head>
 <body>
   <div>
-    <ul class="breadcrumb" style="margin: 0px;">
+    <ul class="breadcrumb" style="margin: 10px;">
       <li>我要发单</li>
       <li>订单添加</li>
     </ul>
   </div>
   <!-- 表单在这 -->
-  <form action="http://localhost:8080/SCLife/PayServelet" id=""
+  <form action="PayServelet" id=""
     class="form-horizontal" method="post">
     <h5 class="page-header alert-info"
-      style="margin: 0px; padding: 10px; margin-bottom: 10px;">基本信息</h5>
+      style="margin: 10px; padding: 10px; margin-bottom: 10px;">基本信息</h5>
     <!-- 开始1 -->
-    <div class="container">
+    <div class="container" style="margin-top:50px">
     <div class="row">
       <div class="col-xs-9">
         <div class="form-group

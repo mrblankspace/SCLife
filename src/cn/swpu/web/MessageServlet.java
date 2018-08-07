@@ -34,7 +34,6 @@ public class MessageServlet extends HttpServlet {
 		User user = (User)httpSession.getAttribute("user");
 		String flag = request.getParameter("flag");
 		//查询用户的未读消息
-	
 		if("queryMessage".equals(flag)&&user!=null){                //ajax请求
 			List<Message> messagesList = messageService.queryMessageByUserId(user.getId());
 			JsonConfig jsonConfig = new JsonConfig();
@@ -50,6 +49,16 @@ public class MessageServlet extends HttpServlet {
 			JsonConfig jsonConfig = new JsonConfig();
 			JSONArray jsonArray = JSONArray.fromObject(messageList,jsonConfig);
 			response.getWriter().println(jsonArray.toString());
+		}else if ("queryAllMessage".equals(flag)&&user!=null) {
+			List<Message> messagesList = messageService.queryAllMessageByUserId(user.getId());
+			JsonConfig jsonConfig = new JsonConfig();
+			JSONArray jsonArray = JSONArray.fromObject(messagesList,jsonConfig);
+			response.getWriter().println(jsonArray.toString());
+		}else if ("deleteMessage".equals(flag)&&user!=null) {
+			int messageId = Integer.parseInt(request.getParameter("messageId"));
+			Message message = new Message();
+			message.setId(messageId);
+			messageService.deleteMessage(message);
 		}
 	}
        

@@ -10,4 +10,5 @@ public interface MessageDao {
 	public List<Message> queryMessageByUserId(int id);
 	public void readMessage(int messageId);
 	public List<Message> findDialogMessage(int user_id, int other_person_id);
+	public List<Message> queryAllMessageByUserId(int id);
 }

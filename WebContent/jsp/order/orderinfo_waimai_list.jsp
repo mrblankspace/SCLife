@@ -144,7 +144,7 @@ function initTable(){
 	
 $("#table").bootstrapTable({ // 对应table标签的id
 	  method : 'get',
-      url: "<%=request.getContextPath()%>/OrderServlet?flag=findOrder_index", 
+      url: "<%=request.getContextPath()%>/OrderServlet?flag=findOrder_waimai", 
       cache: true, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
       contentType : "application/json", 
       dataType : 'json',

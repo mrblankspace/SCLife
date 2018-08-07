@@ -1,6 +1,8 @@
 package cn.swpu.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +27,16 @@ public class AddOrderServelet extends HttpServlet {
         
     }
        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException ,IOException {
-		request.setCharacterEncoding("UTF-8");
-		response.setCharacterEncoding("UTF-8");		
+		request.setCharacterEncoding("UTF-8");			
 		Order or=(Order)request.getSession().getAttribute("order");
+		String order_id=or.getOrder_id();
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out=response.getWriter();
+		out.print("<script language='javascript'>alert('有消息');");
+		System.out.println(order_id);
 		OrderDaoImpl odimpl=new   OrderDaoImpl(); 
 		odimpl.addOrder(or);
+		response.sendRedirect("http://zb.mrblankspace.cn/SCLife");	
 	}
 
 }

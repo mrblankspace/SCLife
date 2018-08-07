@@ -8,6 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta charset="utf-8" />
 <link href="resource/assets/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
 <link rel="stylesheet" href="resource/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
 <link rel="stylesheet" href="resource/assets/css/fonts.googleapis.com.css" />
 <link rel="stylesheet" href="resource/assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
@@ -16,9 +17,15 @@
 <script src="resource/assets/js/ace-extra.min.js"></script>
 <script src="resource/assets/js/jquery-2.1.4.min.js"></script>
 <script src="resource/js/dateformat.js"></script>
-<script>
+<!-- bootstrap-table.min.js -->
+<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+<!-- 引入中文语言包 -->
+<script src="https://cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+
+<!--  <script src="resource/js/message.js"></script>-->
+<script >
 	var global_from_person_id;
-	var user_id = ${user.id};
+	
 	var webSocket;
 	//获取消息
 	function getMessage(){
@@ -39,6 +46,7 @@
 		});
 	},"json");	
 	}
+	
 	//阅读消息 同时建立websocket链接    单人聊天框关闭事件触发  关闭websocket连接
 	function readMessage(messageId){
 		//var a = $("#messageList > input:hidden").val();
@@ -51,7 +59,7 @@
 	//点击特定消息后触发
 	function test(atag,userId){
 		global_from_person_id = userId;
-		$("#messageBox").modal("show");
+		$("#messageBox",parent.document).modal("show");
 		readMessage($(atag).children("input").val());
 	}
 	
@@ -62,9 +70,25 @@
 	
 	
 	$(document).ready(function(){
+		$(".dialogs").scroll(function(){
+			var $this =$(this),
+			viewH =$(this).height(),//可见高度
+			contentH =$(this).get(0).scrollHeight,//内容高度
+			scrollTop =$(this).scrollTop();//滚动高度
+			//if(contentH - viewH - scrollTop <= 100) { //到达底部100px时,加载新内容
+			if(scrollTop/(contentH -viewH)>=0.95){ //到达底部100px时,加载新内容
+			// 这里加载数据..
+			}
+			});
 		//注册模态框事件
-		$("#messageBox").on("show.bs.modal",function(){
+		$("#messageBox",parent.document).on("show.bs.modal",function(){
 			var url = 'ws://'+window.location.host+'websocket/chat';
+			var user_id = $("#user_id").val();//${user.id};
+			//window.alert("user_id"+user_id);
+			if(user_id==null||user_id==""){
+				window.alert("请登录！！！！！");
+				return;
+			}
 			webSocket = new WebSocket("ws://localhost:8080/SCLife/websocket/chat");   //打开聊天框后建立websocket连接
 			//webSocket.send("helloworld");   
 			//为发送按钮注册一个点击事件
@@ -127,6 +151,9 @@
 	        }
 		});
 		$("#messageBox").on("hidden.bs.modal",function(){
+			if(user_id==null||user_id==""){
+				return;
+			}
 			webSocket.close();
 			$(".dialogs").empty();
 		});
@@ -135,6 +162,12 @@
 		//聊天框发送事件
 		$("#submitBt").on("click",function(){
 			//如何取   现在session里有  js代码与jsp过于耦合了  能不能不要在js代码里出现el表达式
+			var user_id = $("#user_id").val();//${user.id};
+			//window.alert("user_id"+user_id);
+			if(user_id==null||user_id==""){
+				window.alert("请登录！！！！！");
+				return;
+			}
 			var from_person_id = user_id;
 			var to_person_id = global_from_person_id;
 			var content = $("#messageInput").val();
@@ -164,7 +197,10 @@
                 var json = {"from_person_id":from_person_id,"to_person_id":to_person_id,"content":content};
                 var data=JSON.stringify(json);
                 //发送websocket消息 //把消息发送给聊天对象
+               // window.alert(11111);
                 webSocket.send(data);
+                window.alert("laile");
+                $(".dialog").scrollTop(Number.MAX_VALUE);
 			}else{
 				window.alert("消息不能为空哦");
 			}
@@ -209,7 +245,7 @@
           		</a>
 
                <ul
-              class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+              class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
              	 <li class="dropdown-header"><i
                 class="icon-envelope-alt" ></i><span id="showMessage1"></span>
 				  </li>
@@ -218,7 +254,7 @@
 				        </ul>
 				 </li>
                  <li class="dropdown-footer">
-                  <a href="inbox.html">
+                  <a href="jsp/message/message_list.jsp" target="mainframe">
                     See all messages
                     <i class="ace-icon fa fa-arrow-right"></i>
                   </a>
@@ -243,7 +279,7 @@
             <ul
               class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 
-              <li><a href="http://localhost:8080/SCLife/OrderServlet?flag=findOrderByUser"
+              <li><a href="OrderServlet?flag=findOrderByUser"
                 target="mainframe"> <i class="ace-icon fa fa-user"></i> 个人资料
               </a></li>
                                          
@@ -292,32 +328,32 @@
 
         <ul class="nav nav-list">
           <li class="active">
-			  <a id="showIndex"  href="OrderServlet?flag=findOrder_index" target="mainframe">
+			  <a id="showIndex"  href="jsp/order/orderinfo_list.jsp" target="mainframe">
               <i class="menu-icon fa fa-tachometer"></i> <span class="menu-text">
                主页 </span>
          	 </a>
 			  <b class="arrow"></b>
 		  </li>
          
-			<li> <a href="OrderServlet?flag=findOrder_waimai" target="mainframe"
+			<li> <a href="jsp/order/orderinfo_waimai_list.jsp" target="mainframe" onclick="onWaiMaiClick();"
             > <i class="menu-icon fa fa-desktop"></i> <span
               class="menu-text"> 快递外卖</span> <b
               class="arrow fa fa-angle-down"></b>
           </a></li>
-          <li><a href="OrderServlet?flag=findOrder_waibao" target="mainframe"
+          <li><a href="jsp/order/orderinfo_waibao.jsp" target="mainframe"
             > <i class="menu-icon fa fa-desktop"></i> <span
               class="menu-text">服务外包</span> <b
               class="arrow fa fa-angle-down"></b>
           </a>
 
           </li>
-          <li><a href="OrderServlet?flag=findOrder_parttimejob" target="mainframe"
+          <li><a href="jsp/order/orderinfo_jianzhi_list.jsp" target="mainframe"
             > <i class="menu-icon fa fa-desktop"></i> <span
               class="menu-text">兼职</span> <b
               class="arrow fa fa-angle-down"></b>
           </a>
          </li>
-          <li><a href="OrderServlet?flag=findOrder_other" target="mainframe"
+          <li><a href="jsp/order/orderinfo_other.jsp" target="mainframe"
             > <i class="menu-icon fa fa-desktop"></i> <span
               class="menu-text">其他</span> <b
               class="arrow fa fa-angle-down"></b>
@@ -345,7 +381,7 @@
 								</script>
       </div>
       <div class="main-content" id="mains" >
-        <iframe id="mainframe" name="mainframe" src="OrderServlet?flag=findOrder_index"
+        <iframe id="mainframe" name="mainframe" src="jsp/order/orderinfo_list.jsp"
           style="width: 100%; border: 0px;"> </iframe>
  
 			 
@@ -367,17 +403,17 @@
   <!-- /.main-container -->
   <!-- basic scripts -->
   
-  <div class="col-sm-6 col-sm-offset-3 modal fade"  role="dialog" id="messageBox" aria-hidden="true" align="center" style="position: fixed;margin-top: 5% ;padding-left: 17px;">
+  <div class="col-sm-6 col-sm-offset-3 modal fade"  role="dialog" id="messageBox" aria-hidden="true" align="center" style="position:fixed;margin-top: 5% ;padding-left: 17px;">
        <div class="widget-box">
             <div class="widget-header">
-                 <h4 class="widget-title lighter smaller">
+                        <h4>
                           <i class="ace-icon fa fa-comment blue"></i>
                           Conversation
                         </h4>
             </div>
-            <div class="widget-body">
+            <div class="widget-body" >
                 <div class="widget-main no-padding">
-                          <div class="dialogs" style="height: 400px">
+                          <div class="dialogs" style="height: 400px;overflow:scroll">
 
                           </div>
 
@@ -397,10 +433,14 @@
                         </div><!-- /.widget-main -->
             </div><!-- /.widget-body -->
        </div><!-- /.widget-box -->
+ <input type="hidden" id="user_id" name="user_id" value="${user.id}">
   </div>
 
 
 <script type="text/javascript">
+function onWaiMaiClick(){
+	
+}
 			if ("ontouchend" in document)
 				document
 						.write("<script src='resource/assets/js/jquery.mobile.custom.min.js'>"

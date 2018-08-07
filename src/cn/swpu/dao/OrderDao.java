@@ -15,7 +15,7 @@ public interface OrderDao {
 	public List<Order> findJobOrder();
 	public List<Order> findWaibaoOrder();
 	public Order getOrderById(String id);
-	
+	public int updateStatus(Order order);
 	/**
 	 * 孔绍坤添加
 	 * @param nature

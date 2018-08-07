@@ -185,5 +185,45 @@ public class MessageDaoImpl implements MessageDao{
 			return list;
 		
 	}
+	/**
+	 * 查询用户所有消息
+	 */
+	@Override
+	public List<Message> queryAllMessageByUserId(int id) {
+		// TODO Auto-generated method stub
+				ArrayList<Message> list = new ArrayList<Message>();
+				Connection connection = null;
+				PreparedStatement preparedStatement = null;
+				try {		
+					connection = dbUtil.getCon();
+					String sql = "select * from message where to_person_id=?";
+					preparedStatement = connection.prepareStatement(sql);
+					preparedStatement.setInt(1,id);
+					//preparedStatement.setString(2,"未读");
+					ResultSet rs = preparedStatement.executeQuery();
+					while(rs.next()){
+						Message message = new Message();
+						message.setId(rs.getInt("id"));
+						message.setDate(rs.getString("date"));
+						message.setContent(rs.getString("content"));
+						message.setStatus(rs.getString("status"));
+						message.setTo_person(userDao.findById(rs.getInt("to_person_id")));
+						message.setFrom_person(userDao.findById(rs.getInt("from_person_id")));
+						list.add(message);
+					}
+				} catch (SQLException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}finally {
+					try {
+						preparedStatement.close();
+						connection.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				return list;
+	}
 	
 }

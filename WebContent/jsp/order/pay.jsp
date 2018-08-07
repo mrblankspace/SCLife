@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,8 +11,8 @@
     <link href="sys/assets/css/main-min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	<p>支付中,请稍等
-	 <form style='display:nono'  id='formpay' name='formpay' method='post' action='https://pay.paysapi.com'>
+	<p>跳转中，请稍等。。。
+	 <form style='display:none'  id='formpay' name='formpay' method='post' action='https://pay.paysapi.com'>
         <input name='goodsname' id='goodsname' type='text' value= <%=request.getAttribute("goodsname")%>>
         <input name='istype' id='istype' type='text' value=<%=request.getAttribute("istype")%>>
         <input name='key' id='key' type='text' value= <%=request.getAttribute("key")%>>

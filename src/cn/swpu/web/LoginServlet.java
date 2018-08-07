@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
-
 import cn.swpu.entity.User;
 import cn.swpu.service.UserService;
 import cn.swpu.service.impl.UserServiceImpl;
@@ -28,13 +27,13 @@ public class LoginServlet extends HttpServlet {
 		super();
 	}
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doPost(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		// 能够接受页面传送来的中文，并传输出去
 		request.setCharacterEncoding("UTF-8");
@@ -42,7 +41,7 @@ public class LoginServlet extends HttpServlet {
 		String flag = request.getParameter("flag");
 		UserService us = new UserServiceImpl();
 		if ("login".equals(flag)) {
-			
+
 			String email = request.getParameter("userEmail");
 			String password = request.getParameter("password");
 			User tempuser = new User();
@@ -68,8 +67,7 @@ public class LoginServlet extends HttpServlet {
 					HttpSession httpsession = request.getSession();
 					httpsession.setAttribute("user", imlUser);
 					httpsession.setMaxInactiveInterval(30 * 60);
-					request.getRequestDispatcher("index.jsp").forward(request,
-							response);
+					request.getRequestDispatcher("index.jsp").forward(request, response);
 				} else {
 					// 重定向，回到登录页面
 					response.sendRedirect("login.jsp");
@@ -77,30 +75,30 @@ public class LoginServlet extends HttpServlet {
 			} else {
 				if (imlUser.getEmail() != null) {
 					String imageText = request.getParameter("image");
-			        // 图片的验证码
-			        String text = (String) request.getSession().getAttribute("text");
-			        if (!text.equalsIgnoreCase(imageText)) {
-			            request.setAttribute("imageMess", "验证码输入错误!");
-			            request.getRequestDispatcher("login.jsp").forward(request, response);
-			        }
-					HttpSession httpSession = request.getSession();
-					httpSession.setAttribute("user", imlUser);// 此处已修改为传出user
+					// 图片的验证码
+					String text = (String) request.getSession().getAttribute("text");
+					if (text!=null&&!text.equalsIgnoreCase(imageText)) {
+						request.setAttribute("imageMess", "验证码输入错误!");
+						request.getRequestDispatcher("login.jsp").forward(request, response);
+					} else {
+						HttpSession httpSession = request.getSession();
+						httpSession.setAttribute("user", imlUser);// 此处已修改为传出user
 
-					httpSession.setMaxInactiveInterval(30 * 60);
+						httpSession.setMaxInactiveInterval(30 * 60);
 
-					// 把用户名和密码都放到cookie当中
-					Cookie emailCookie = new Cookie("userEmail",
-							URLEncoder.encode(imlUser.getEmail(), "UTF-8"));// 支持中文
-					Cookie pwdCookie = new Cookie("password",
-							imlUser.getPassword());
-					emailCookie.setMaxAge(60 * 60);
-					emailCookie.setPath("/");
-					pwdCookie.setMaxAge(60 * 60);
-					pwdCookie.setPath("/");
-					response.addCookie(emailCookie);
-					response.addCookie(pwdCookie);
-					request.getRequestDispatcher("index.jsp").forward(request,
-							response);// 转向哪个界面呢
+						// 把用户名和密码都放到cookie当中
+						Cookie emailCookie = new Cookie("userEmail", URLEncoder.encode(imlUser.getEmail(), "UTF-8"));// 支持中文
+						Cookie pwdCookie = new Cookie("password", imlUser.getPassword());
+						emailCookie.setMaxAge(60 * 60);
+						emailCookie.setPath("/");
+						pwdCookie.setMaxAge(60 * 60);
+						pwdCookie.setPath("/");
+						response.addCookie(emailCookie);
+						response.addCookie(pwdCookie);
+						// request.("index.jsp").forward(request,
+						// response);// 转向哪个界面呢
+						response.sendRedirect("index.jsp");
+					}
 				} else {
 					response.sendRedirect("login.jsp");
 				}
@@ -121,8 +119,7 @@ public class LoginServlet extends HttpServlet {
 
 			int row = us.Register(user);
 
-			request.getRequestDispatcher("login.jsp")
-					.forward(request, response);
+			request.getRequestDispatcher("login.jsp").forward(request, response);
 
 		} else if ("edit".equals(flag)) {
 			int id = Integer.parseInt(request.getParameter("id"));
@@ -130,8 +127,7 @@ public class LoginServlet extends HttpServlet {
 			tempuser.setId(id);
 			User imlUser = us.queryUserById(tempuser);
 			request.setAttribute("user", imlUser);
-			request.getRequestDispatcher("jsp/user/edituser_inf.jsp").forward(
-					request, response);
+			request.getRequestDispatcher("jsp/user/edituser_inf.jsp").forward(request, response);
 		} else if ("save".equals(flag)) {
 			User user = new User();
 			String username = request.getParameter("username");
@@ -153,8 +149,7 @@ public class LoginServlet extends HttpServlet {
 			HttpSession httpSession = request.getSession();
 			httpSession.setAttribute("user", user);
 			// response.sendRedirect("index.jsp");
-			request.getRequestDispatcher("jsp/user/userinfo_show.jsp").forward(
-					request, response);
+			request.getRequestDispatcher("OrderServlet?flag=findOrderByUser").forward(request, response);
 
 		}
 	}
